@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
+    "test": "mocha --timeout 5000",
     "posttest": "npm run lint"
   },
   "dependencies": {
@@ -18,11 +19,15 @@
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.2.0",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^3.3.0"
+    "strong-error-handler": "^3.4.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^3.17.1",
-    "eslint-config-loopback": "^8.0.0"
+    "eslint-config-loopback": "^8.0.0",
+    "mocha": "^6.2.1",
+    "request": "^2.88.0",
+    "should": "^13.2.3"
   },
   "repository": {
     "type": "",
