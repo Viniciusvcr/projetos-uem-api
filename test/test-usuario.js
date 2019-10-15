@@ -31,6 +31,15 @@ const updateTest = {
   emailVerified: false
 };
 
+const roleTest = {
+  nome: 'Vinícius Regatieri',
+  realm: 'RoleInexistente',
+  username: 'vcr',
+  email: 'teste@teste.com',
+  password: '123',
+  emailVerified: false
+};
+
 describe('Modelo Usuário', () => {
   it('Deveria criar um novo usuário e retornar status 200', done => {
     request.post(
@@ -201,6 +210,23 @@ describe('Modelo Usuário', () => {
       (error, responsePatch, body) => {
         const obj = JSON.parse(responsePatch.body);
         expect(responsePatch.statusCode).to.equal(401);
+        done();
+      }
+    );
+  });
+
+  it('Deveria retornar 404 caso a função passada no cadastro não exista', done => {
+    request.post(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/Usuarios`,
+        body: JSON.stringify(roleTest)
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(404);
+        expect(obj.error.message).to.equal('Realm não encontrada');
         done();
       }
     );
