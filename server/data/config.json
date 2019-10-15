@@ -1,0 +1,11 @@
+{
+  "admin": {
+  "realm": "admin",
+  "username": "admin",
+  "email": "teste@teste.com",
+  "password": "admin",
+  "nome": "Admin",
+  "emailVerified": true
+  },
+  "roles": ["Docente", "admin", "Normal", "Discente"]
+}
