@@ -29,7 +29,7 @@ module.exports = function(app) {
     const Usuario = app.models.Usuario;
     const RoleMapping = app.models.RoleMapping;
     const Role = app.models.Role;
-    const Admin = config.Admin;
+    const Admin = config.admin;
 
     Usuario.upsertWithWhere({username: Admin.username}, Admin, (err, user) => {
       if (err) {

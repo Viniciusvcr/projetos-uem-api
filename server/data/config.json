@@ -2,7 +2,7 @@
   "admin": {
   "realm": "admin",
   "username": "admin",
-  "email": "teste@teste.com",
+  "email": "admin@teste.com",
   "password": "admin",
   "nome": "Admin",
   "emailVerified": true
