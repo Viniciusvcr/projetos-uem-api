@@ -38,5 +38,9 @@
   "processoSeletivo": {
     "dataSource": "db",
     "public": true
+  },
+  "inscrito": {
+    "dataSource": "db",
+    "public": true
   }
 }

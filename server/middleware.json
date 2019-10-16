@@ -9,7 +9,10 @@
         "origin": true,
         "credentials": true,
         "maxAge": 86400,
-        "exposedHeaders": ["Content-Range", "X-Total-Count"]
+        "exposedHeaders": [
+          "Content-Range",
+          "X-Total-Count"
+        ]
       }
     },
     "helmet#xssFilter": {},
@@ -49,12 +52,16 @@
   },
   "routes": {
     "loopback#rest": {
-      "paths": ["${restApiRoot}"]
+      "paths": [
+        "${restApiRoot}"
+      ]
     }
   },
   "files": {
     "loopback#static": {
-      "paths": ["/pet"],
+      "paths": [
+        "/pet"
+      ],
       "params": "$!../client/pet"
     }
   },
