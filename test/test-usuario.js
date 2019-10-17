@@ -8,7 +8,7 @@ const baseUrl = 'http://localhost:3001/api';
 const postTest = {
   nome: 'Vinícius',
   realm: 'Normal',
-  username: 'vcr',
+  username: 'teste',
   email: 'teste@teste.com',
   password: '123',
   emailVerified: false
@@ -17,7 +17,7 @@ const postTest = {
 const emailInvalidoTest = {
   nome: 'Vinícius',
   realm: 'Normal',
-  username: 'vcr',
+  username: 'teste',
   email: 'naoeumemail',
   password: '123'
 };
@@ -25,7 +25,7 @@ const emailInvalidoTest = {
 const updateTest = {
   nome: 'Vinícius Regatieri',
   realm: 'Normal',
-  username: 'vcr',
+  username: 'teste',
   email: 'teste@teste.com',
   password: '123',
   emailVerified: false
@@ -34,7 +34,7 @@ const updateTest = {
 const roleTest = {
   nome: 'Vinícius Regatieri',
   realm: 'RoleInexistente',
-  username: 'vcr',
+  username: 'teste',
   email: 'teste@teste.com',
   password: '123',
   emailVerified: false
@@ -56,7 +56,7 @@ describe('Modelo Usuário', () => {
           expect(response.statusCode).to.equal(200);
           expect(obj.nome).to.equal('Vinícius');
           expect(obj.realm).to.equal('Normal');
-          expect(obj.username).to.equal('vcr');
+          expect(obj.username).to.equal('teste');
           expect(obj.email).to.equal('teste@teste.com');
           expect(obj.emailVerified).to.equal(false);
           done();
@@ -89,7 +89,7 @@ describe('Modelo Usuário', () => {
               expect(responsePatch.statusCode).to.equal(200);
               expect(obj.nome).to.equal('Vinícius Regatieri');
               expect(obj.realm).to.equal('Normal');
-              expect(obj.username).to.equal('vcr');
+              expect(obj.username).to.equal('teste');
               expect(obj.email).to.equal('teste@teste.com');
               expect(obj.emailVerified).to.equal(false);
               done();
@@ -123,7 +123,7 @@ describe('Modelo Usuário', () => {
               expect(responsePatch.statusCode).to.equal(200);
               expect(obj.nome).to.equal('Vinícius Regatieri');
               expect(obj.realm).to.equal('Normal');
-              expect(obj.username).to.equal('vcr');
+              expect(obj.username).to.equal('teste');
               expect(obj.email).to.equal('teste@teste.com');
               expect(obj.emailVerified).to.equal(false);
               done();
