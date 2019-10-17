@@ -18,7 +18,24 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "discente": {
+      "type": "belongsTo",
+      "model": "Discente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "docente": {
+      "type": "belongsTo",
+      "model": "Docente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [
     {
       "accessType": "*",
