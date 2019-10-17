@@ -1,0 +1,38 @@
+{
+  "name": "Discente",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "ra": {
+      "type": "string",
+      "required": true
+    },
+    "curso": {
+      "type": "string",
+      "required": true
+    },
+    "turno": {
+      "type": "string",
+      "required": true
+    },
+    "campus": {
+      "type": "string",
+      "required": true
+    },
+    "serie": {
+      "type": "number",
+      "required": true
+    },
+    "situacaoAcademica": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
