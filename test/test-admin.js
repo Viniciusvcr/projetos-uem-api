@@ -12,7 +12,7 @@ const postTest = {
 };
 
 describe('Modelo Usuário - Admin', () => {
-  it('Deveria criar um novo Administrador e retonar status 200', done => {
+  it('Deveria criar um novo Administrador e retornar status 200', done => {
     request.post(
       {
         headers: {'content-type': 'application/json'},
