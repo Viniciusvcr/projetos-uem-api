@@ -27,7 +27,6 @@ module.exports = function(Usuario) {
     const roles = require('../../server/data/config.json').roles;
 
     if (roles.includes(newUsuario.realm)) {
-      console.log(roles);
       return next();
     } else return next(error('Realm não encontrada', 404));
   });

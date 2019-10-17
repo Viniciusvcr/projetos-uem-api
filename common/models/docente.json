@@ -1,0 +1,32 @@
+{
+  "name": "Docente",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "matricula": {
+      "type": "string",
+      "required": true
+    },
+    "cargo": {
+      "type": "string",
+      "required": true
+    },
+    "lotacao": {
+      "type": "string"
+    },
+    "situacao": {
+      "type": "string",
+      "required": true
+    },
+    "vencimentoContrato": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
