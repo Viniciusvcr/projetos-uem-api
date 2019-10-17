@@ -23,6 +23,11 @@
     },
     "vencimentoContrato": {
       "type": "date"
+    },
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "uuidv4"
     }
   },
   "validations": [],
