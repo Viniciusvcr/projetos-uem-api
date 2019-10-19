@@ -19,6 +19,8 @@
     "loopback": "^3.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.2.0",
+    "loopback-content-range": "^2.0.0",
+    "loopback3-xtotalcount": "^0.1.2",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^3.4.0"
   },
