@@ -12,17 +12,18 @@ const error = function(message, status) {
 module.exports = function(Docente) {
   // Verificação de duplicação de matrícula
   Docente.observe('before save', (ctx, next) => {
-    const newDocente = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
+    if (ctx.isNewInstance) {
+      const newDocente = ctx.instance;
+      Docente.findOne({where: {matricula: newDocente.matricula}}, (err, exists) => {
+        if (err) {
+          return next(err);
+        }
 
-    Docente.findOne({where: {matricula: newDocente.matricula}}, (err, exists) => {
-      if (err) {
-        return next(err);
-      }
-
-      if (exists) {
-        return next(error('Matrícula já cadastrada', 400));
-      } else return next();
-    });
+        if (exists) {
+          return next(error('Matrícula já cadastrada', 400));
+        } else return next();
+      });
+    } else return next();
   });
 
   // Verificação de integridade de vencimentoContrato
