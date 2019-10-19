@@ -45,6 +45,15 @@ const projetoUpdate = {
   tipo: 'PIC',
 };
 
+const projetoUpdateDateError = {
+  dataInicio: new Date(2019, 10, 1, 0, 0, 0, 0),
+  dataTermino: new Date(2018, 9, 30, 0, 0, 0, 0),
+};
+
+const projetoUpdateLimiteError = {
+  atualParticipantes: 5,
+};
+
 describe('Testes Projetos', () => {
   it('Deveria criar um projeto e retornar status code 200', done => {
     request.post(
@@ -136,6 +145,25 @@ describe('Testes Projetos', () => {
         expect(obj.resumo).to.equal('Pesquisa sobre Métodos Ágeis');
         expect(obj.ativo).to.equal(true);
         expect(obj.tipo).to.equal('PIC');
+        done();
+      }
+    );
+  });
+  // eslint-disable-next-line max-len
+  it('Deveria atualizar os atributos do projeto e retornar status code 400 - Falha ultrapassar o limite máximo de inscritos', done => {
+    request.patch(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/Projetos/${projetoPost.id}`,
+        body: JSON.stringify(projetoUpdateLimiteError),
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(400);
+        expect(obj.error.message).to.equal(
+          'Quantidade atual de participantes excede o limite permitido.'
+        );
         done();
       }
     );

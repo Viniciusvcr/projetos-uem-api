@@ -22,17 +22,20 @@ module.exports = function(Projeto) {
         } else return next();
       }
     } else {
-      const dataInicio = ctx.data.dataInicio.valueOf();
-      const dataTermino = ctx.data.dataTermino.valueOf();
+      if (ctx.data.dataInicio && ctx.data.dataInicio) {
+        const dataInicio = ctx.data.dataInicio.valueOf();
+        const dataTermino = ctx.data.dataTermino.valueOf();
 
-      if (dataInicio > dataTermino) {
-        const error = new Error();
+        if (dataInicio > dataTermino) {
+          const error = new Error();
 
-        error.message = 'Data de término antecede data de início.';
-        error.status = 400;
+          error.message = 'Data de término antecede data de início.';
+          error.status = 400;
 
-        return next(error);
-      } else return next();
+          return next(error);
+        } else return next();
+      }
+      return next();
     }
   });
 
