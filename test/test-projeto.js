@@ -17,11 +17,21 @@ const projetoPost = {
 };
 
 const projetoDateError = {
-  titulo: 'Pesquisa de software',
+  titulo: 'Pesquisa de PAA',
   dataInicio: new Date(2020, 10, 1, 0, 0, 0, 0),
   dataTermino: new Date(2019, 9, 30, 0, 0, 0, 0),
   limiteParticipantes: 3,
-  resumo: 'Pesquisa sobre Engenharia de Software',
+  resumo: 'Pesquisa sobre Projeto e Análise de Algoritmos',
+  tipo: 'PIBIC',
+};
+
+const projetoLimiteError = {
+  titulo: 'Pesquisa de LFA',
+  dataInicio: new Date(2018, 10, 1, 0, 0, 0, 0),
+  dataTermino: new Date(2019, 9, 30, 0, 0, 0, 0),
+  limiteParticipantes: 2,
+  atualParticipantes: 3,
+  resumo: 'Pesquisa sobre Linguages Formais e Autômatos',
   tipo: 'PIC',
 };
 
@@ -65,10 +75,28 @@ describe('Testes Projetos', () => {
       (error, response, body) => {
         const obj = JSON.parse(response.body);
 
-        projetoDateError['id'] = obj.id;
         expect(response.statusCode).to.equal(400);
         expect(obj.error.message).to.equal(
           'Data de término antecede data de início.'
+        );
+        done();
+      }
+    );
+  });
+  // eslint-disable-next-line max-len
+  it('Deveria criar um projeto e retornar status code 400 - Falha ao colocar uma quantidade atual de participantes maior que o limite', done => {
+    request.post(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/Projetos`,
+        body: JSON.stringify(projetoLimiteError),
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(400);
+        expect(obj.error.message).to.equal(
+          'Quantidade atual de participantes excede o limite permitido.'
         );
         done();
       }
