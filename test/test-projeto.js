@@ -197,4 +197,31 @@ describe('Testes Projetos', () => {
       }
     );
   });
+
+  it('Deveria buscar um projeto e retornar status code 200', done => {
+    request.get(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/Projetos/${projetoPost.id}`,
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(200);
+        expect(obj.titulo).to.equal('Pesquisa de Engenharia de Software');
+        expect(new Date(obj.dataInicio)).to.equalDate(
+          projetoUpdate['dataInicio']
+        );
+        expect(new Date(obj.dataTermino)).to.equalDate(
+          projetoUpdate['dataTermino']
+        );
+        expect(obj.atualParticipantes).to.equal(2);
+        expect(obj.limiteParticipantes).to.equal(2);
+        expect(obj.resumo).to.equal('Pesquisa sobre Métodos Ágeis');
+        expect(obj.ativo).to.equal(true);
+        expect(obj.tipo).to.equal('PIC');
+        done();
+      }
+    );
+  });
 });
