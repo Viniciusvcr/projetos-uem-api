@@ -235,4 +235,145 @@ describe('Modelo Usuário', () => {
       );
     });
   });
+
+  describe('Testes gerais', () => {
+    it('Deveria retornar status 200, chave de acesso à plataforma e id do usuário ao fazer login', done => {
+      request.post(
+        {
+          headers: {'content-type': 'application/json'},
+          url: `${baseUrl}/Usuarios`,
+          body: JSON.stringify(postTest)
+        },
+        () => {
+          request.post(
+            {
+              headers: {
+                'content-type': 'application/json'
+              },
+              url: `${baseUrl}/Usuarios/login`,
+              body: JSON.stringify({username: postTest.username, password: postTest.password})
+            },
+            (error, response, body) => {
+              const obj = JSON.parse(response.body);
+
+              expect(response.statusCode).to.equal(200);
+              expect(obj.id).to.exist;
+              expect(obj.userId).to.equal(postTest.id);
+              done();
+            }
+          );
+        }
+      );
+    });
+
+    it('Deveria retornar status 401 e código "LOGIN_FAILED" ao tentar fazer login com credenciais inválidas ou sem se cadastrar', done => {
+      request.post(
+        {
+          headers: {'content-type': 'application/json'},
+          url: `${baseUrl}/Usuarios/login`,
+          body: JSON.stringify({username: 'teste', password: '111'})
+        },
+        (error, response, body) => {
+          const obj = JSON.parse(response.body);
+
+          expect(response.statusCode).to.equal(401);
+          expect(obj.error.code).to.equal('LOGIN_FAILED');
+          done();
+        }
+      );
+    });
+
+    it('Deveria retornar 204 ao deslogar da plataforma usando a chave de acesso', done => {
+      request.post(
+        {
+          headers: {'content-type': 'application/json'},
+          url: `${baseUrl}/Usuarios/login`,
+          body: JSON.stringify({username: postTest.username, password: postTest.password})
+        },
+        (error, response, body) => {
+          const obj = JSON.parse(response.body);
+          const token = obj.id;
+
+          request.post(
+            {
+              headers: {
+                'content-type': 'application/json',
+                Accept: 'application/json',
+                Authorization: token
+              },
+              url: `${baseUrl}/Usuarios/logout`
+            },
+            (error, responseLogout, bodyLogout) => {
+              expect(responseLogout.statusCode).to.equal(204);
+              done();
+            }
+          );
+        }
+      );
+    });
+
+    it('Deveria retornar 401 ao deslogar da plataforma sem a chave de acesso', done => {
+      request.post(
+        {
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json'
+          },
+          url: `${baseUrl}/Usuarios/logout`
+        },
+        (error, responseLogout, bodyLogout) => {
+          expect(responseLogout.statusCode).to.equal(401);
+          done();
+        }
+      );
+    });
+
+    it('Deveria retornar status 204 e atualizar a senha de um Usuário', done => {
+      request.post(
+        {
+          headers: {
+            'content-type': 'application/json'
+          },
+          url: `${baseUrl}/Usuarios/login`,
+          body: JSON.stringify({username: postTest.username, password: postTest.password})
+        },
+        (error, responseLogin1, bodyLogin1) => {
+          const obj = JSON.parse(responseLogin1.body);
+          const token = obj.id;
+          request.post(
+            {
+              headers: {
+                'content-type': 'application/json',
+                Accept: 'application/json',
+                Authorization: token
+              },
+              url: `${baseUrl}/Usuarios/change-password`,
+              body: JSON.stringify({oldPassword: postTest.password, newPassword: '1234'})
+            },
+            (error, response, body) => {
+              expect(response.statusCode).to.equal(204);
+
+              request.post(
+                {
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  url: `${baseUrl}/Usuarios/login`,
+                  body: JSON.stringify({username: postTest.username, password: '1234'})
+                },
+                (error, responseLogin2, bodyLogin2) => {
+                  const obj = JSON.parse(responseLogin2.body);
+
+                  expect(responseLogin2.statusCode).to.equal(200);
+                  expect(obj.id).to.exist;
+                  expect(obj.userId).to.equal(postTest.id);
+                  done();
+                }
+              );
+            }
+          );
+        }
+      );
+    });
+  });
 });
