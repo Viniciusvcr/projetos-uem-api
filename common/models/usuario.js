@@ -16,8 +16,10 @@ module.exports = function(Usuario) {
   Usuario.observe('before save', (ctx, next) => {
     const newUsuario = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
 
-    if (!verifyEmail.validate(newUsuario.email)) {
-      return next(error('Email inválido', 400));
+    if (newUsuario.email) {
+      if (!verifyEmail.validate(newUsuario.email)) {
+        return next(error('Email inválido', 400));
+      } else return next();
     } else return next();
   });
 
@@ -26,9 +28,11 @@ module.exports = function(Usuario) {
     const newUsuario = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
     const roles = require('../../server/data/config.json').roles;
 
-    if (roles.includes(newUsuario.realm)) {
-      return next();
-    } else return next(error('Realm não encontrada', 404));
+    if (newUsuario.realm) {
+      if (roles.includes(newUsuario.realm)) {
+        return next();
+      } else return next(error('Realm não encontrada', 404));
+    } else return next();
   });
 
   // Verifica a existência do Docente/Discente antes de criar o Usuário

@@ -49,7 +49,9 @@
           "prototype.patchAttributes": true,
           "deleteById": true,
           "login": true,
-          "logout": true
+          "logout": true,
+          "changePassword": true,
+          "resetPassword": true
         }
       }
     }
