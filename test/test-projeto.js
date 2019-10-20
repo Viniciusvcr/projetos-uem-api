@@ -52,6 +52,7 @@ const projetoUpdateDateError = {
 
 const projetoUpdateLimiteError = {
   atualParticipantes: 5,
+  limiteParticipantes: 2,
 };
 
 describe('Testes Projetos', () => {
@@ -125,7 +126,10 @@ describe('Testes Projetos', () => {
   it('Deveria atualizar os atributos do projeto e retornar status code 200', done => {
     request.patch(
       {
-        headers: {'content-type': 'application/json'},
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json',
+        },
         url: `${baseUrl}/Projetos/${projetoPost.id}`,
         body: JSON.stringify(projetoUpdate),
       },
@@ -153,7 +157,10 @@ describe('Testes Projetos', () => {
   it('Deveria atualizar os atributos do projeto e retornar status code 400 - Falha ultrapassar o limite máximo de inscritos', done => {
     request.patch(
       {
-        headers: {'content-type': 'application/json'},
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json',
+        },
         url: `${baseUrl}/Projetos/${projetoPost.id}`,
         body: JSON.stringify(projetoUpdateLimiteError),
       },
@@ -163,6 +170,28 @@ describe('Testes Projetos', () => {
         expect(response.statusCode).to.equal(400);
         expect(obj.error.message).to.equal(
           'Quantidade atual de participantes excede o limite permitido.'
+        );
+        done();
+      }
+    );
+  });
+  // eslint-disable-next-line max-len
+  it('Deveria atualizar os atributos do projeto e retornar status code 400 - Falha ultrapassar ao colocar data de término menor que data de início', done => {
+    request.patch(
+      {
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json',
+        },
+        url: `${baseUrl}/Projetos/${projetoPost.id}`,
+        body: JSON.stringify(projetoUpdateDateError),
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(400);
+        expect(obj.error.message).to.equal(
+          'Data de término antecede data de início.'
         );
         done();
       }
