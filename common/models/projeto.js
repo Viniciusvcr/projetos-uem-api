@@ -92,4 +92,29 @@ module.exports = function(Projeto) {
       }
     );
   });
+
+  // Incremento do número de acessos para o projeto
+  Projeto.afterRemote('prototype.findById', (ctx, projetoInstance, next) => {
+    const relatorioProjeto = Projeto.app.models.relatorioProjeto;
+
+    relatorioProjeto.findOne(
+      {where: {projetoId: projetoInstance.id}},
+      (err, relatorio) => {
+        console.log(err);
+        if (err) return next(err);
+
+        console.log(relatorio);
+
+        relatorioProjeto.updateAtributte(
+          'numeroAcessos',
+          relatorio.numeroAcessos + 1,
+          (err, updatedRelatorio) => {
+            if (err) return next(err);
+            else return next();
+          }
+        );
+        return next();
+      }
+    );
+  });
 };

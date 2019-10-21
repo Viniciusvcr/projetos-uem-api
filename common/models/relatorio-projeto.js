@@ -37,14 +37,20 @@ module.exports = function(Relatorioprojeto) {
       (err, relatorio) => {
         if (err) return cb(err);
 
-        const dataAtual = Date.now();
-        const dataRelatorio = relatorio.dataCriacao;
+        const dataAtual = new Date(Date.now());
+        const dataRelatorio = new Date(relatorio.dataCriacao.valueOf());
 
         const months = monthDiff(dataAtual, dataRelatorio);
 
-        const media = relatorio.numeroAcessos / months;
+        if (months == 0) {
+          console.log('Zero');
+          return cb(null, relatorio.numeroAcessos);
+        } else {
+          console.log('N zero');
+          const media = relatorio.numeroAcessos / months;
 
-        return cb(null, media);
+          return cb(null, media);
+        }
       }
     );
   };
@@ -56,8 +62,8 @@ module.exports = function(Relatorioprojeto) {
       required: true,
       description: 'ID do Projeto',
     },
-    returns: {arg: 'response', type: 'number', root: 'true'},
-    http: {path: '/mediaAcessos', verb: 'get', status: 204},
+    returns: {arg: 'response', type: 'number', root: true},
+    http: {path: '/mediaAcessos', verb: 'get', status: 200},
     description: 'Retorna média de acessos por mês de um projeto.',
   });
 };
