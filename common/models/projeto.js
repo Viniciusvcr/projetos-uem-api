@@ -82,8 +82,6 @@ module.exports = function(Projeto) {
   Projeto.afterRemote('create', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
-    console.log(Projeto.app.models);
-
     const dataAtual = Date.now();
     relatorioProjeto.create(
       {dataCriacao: dataAtual, projetoId: projetoInstance.id},
