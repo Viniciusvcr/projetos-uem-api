@@ -34,5 +34,17 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "Area": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Subarea": {
+    "dataSource": "db",
+    "public": true
+  },
+  "AcessoMensalUsuarios": {
+    "dataSource": "db",
+    "public": true
   }
 }
