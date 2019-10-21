@@ -1,0 +1,23 @@
+{
+  "name": "relatorioProjeto",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "numeroAcessos": {
+      "type": "number",
+      "default": 0
+    },
+    "dataCriacao": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
