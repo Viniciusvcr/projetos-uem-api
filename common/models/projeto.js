@@ -77,4 +77,21 @@ module.exports = function(Projeto) {
       } else return next();
     }
   });
+
+  // Cria o modelo do relatorio para o projeto instanciado
+  Projeto.afterRemote('create', (ctx, projetoInstance, next) => {
+    const relatorioProjeto = Projeto.app.models.relatorioProjeto;
+
+    console.log(Projeto.app.models);
+
+    const dataAtual = Date.now();
+    relatorioProjeto.create(
+      {dataCriacao: dataAtual, projetoId: projetoInstance.id},
+      (err, obj) => {
+        if (err) return next(err);
+
+        return next();
+      }
+    );
+  });
 };
