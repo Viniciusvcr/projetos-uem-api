@@ -15,7 +15,7 @@ const patchSubarea = {
   nome: 'Qualquer curso mais fácil, pelo amor de deus alguém me ajuda'
 };
 
-describe('testes CRUD áreas', () => {
+describe('testes CRUD subareas', () => {
   it('deveria criar uma instancia de área e retornar 200', done => {
     request.post(
       {

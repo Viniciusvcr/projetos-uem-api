@@ -15,7 +15,7 @@ const patchAcessoMensaUsuario = {
   quantidadeAcessos: 999
 };
 
-describe('testes CRUD áreas', () => {
+describe('testes CRUD acessos mensais', () => {
   it('deveria criar uma instancia de área e retornar 200', done => {
     request.post(
       {
