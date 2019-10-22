@@ -45,6 +45,29 @@ describe('Testes Relatório Projetos', () => {
       }
     );
   });
+  // eslint-disable-next-line max-len
+  it('Deveria tentar criar um relatório e retornar status code 400 - Falha ao duplicar o relatório de um projeto', done => {
+    request.post(
+      {
+        headers: {'content-type': 'application/json'},
+        // eslint-disable-next-line max-len
+        url: `${baseUrl}/relatorioProjetos`,
+        body: JSON.stringify({
+          dataCriacao: new Date(2020, 9, 30, 0, 0, 0, 0),
+          projetoId: projetoPost.id,
+        }),
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(409);
+        expect(obj.error.message).to.equal(
+          'Relatório para o projeto já existente.'
+        );
+        done();
+      }
+    );
+  });
 
   it('Deveria buscar um Relatório e retornar status code 200', done => {
     request.get(

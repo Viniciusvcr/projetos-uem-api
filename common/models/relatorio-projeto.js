@@ -30,6 +30,30 @@ module.exports = function(Relatorioprojeto) {
     } else return next();
   });
 
+  //Verifica se o projeto ao qual o relatorio pertence existe
+  Relatorioprojeto.observe('before save', (ctx, next) => {
+    if (ctx.isNewInstance) {
+      return next();
+    } else {
+      const projetoId = ctx.data.projetoId;
+      if (projetoId) {
+        Projetos.findOne({where: {projetoId}}, (err, projeto) => {
+          if (err) return next(err);
+          if (projeto) return next();
+          else {
+            const error = new Error();
+
+            error.message = 'Projeto não encontrado.';
+            error.status = 404;
+
+            return next(error);
+          }
+        });
+      }
+      return next();
+    }
+  });
+
   // Retorna a media de acessos por mes de um projeto
   Relatorioprojeto.mediaAcessos = function(projetoId, cb) {
     Relatorioprojeto.findOne(
