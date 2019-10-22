@@ -88,7 +88,7 @@ module.exports = function(Relatorioprojeto) {
     http: {path: '/mediaAcessos', verb: 'get', status: 200},
     description: 'Retorna média de acessos por mês de um projeto.',
   });
-
+  //eslint-disable-next-line
   Relatorioprojeto.relevancia = async function(projetoId, cb) {
     try {
       const relatorio = await Relatorioprojeto.findOne({where: {projetoId}});

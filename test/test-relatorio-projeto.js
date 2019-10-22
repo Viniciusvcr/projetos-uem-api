@@ -107,4 +107,54 @@ describe('Testes Relatório Projetos', () => {
       }
     );
   });
+  // eslint-disable-next-line max-len
+  it('Deveria retornar a média de acessos de um projeto e status code 200', done => {
+    request.get(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/Projetos/2`,
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(200);
+        request.get(
+          {
+            headers: {'content-type': 'application/json'},
+            url: `${baseUrl}/Projetos/2`,
+          },
+          (error, response, body) => {
+            const obj = JSON.parse(response.body);
+
+            expect(response.statusCode).to.equal(200);
+            request.get(
+              {
+                headers: {'content-type': 'application/json'},
+                url: `${baseUrl}/Projetos/2`,
+              },
+              (error, response, body) => {
+                const obj = JSON.parse(response.body);
+
+                expect(response.statusCode).to.equal(200);
+                request.get(
+                  {
+                    headers: {'content-type': 'application/json'},
+                    // eslint-disable-next-line max-len
+                    url: `${baseUrl}/relatorioProjetos/mediaAcessos?projetoId=2`,
+                  },
+                  (error, response, body) => {
+                    const obj = JSON.parse(response.body);
+
+                    expect(response.statusCode).to.equal(200);
+                    expect(obj).to.equal(3);
+                    done();
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+  });
 });
