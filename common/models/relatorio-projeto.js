@@ -36,6 +36,7 @@ module.exports = function(Relatorioprojeto) {
       return next();
     } else {
       const projetoId = ctx.data.projetoId;
+      const Projetos = Relatorioprojeto.app.models.Projeto;
       if (projetoId) {
         Projetos.findOne({where: {projetoId}}, (err, projeto) => {
           if (err) return next(err);
@@ -49,8 +50,7 @@ module.exports = function(Relatorioprojeto) {
             return next(error);
           }
         });
-      }
-      return next();
+      } else return next();
     }
   });
 

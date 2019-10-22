@@ -16,6 +16,10 @@ const projetoPost = {
   tipo: 'PIC',
 };
 
+const relatorioPostError = {
+  projetoId: 30,
+};
+
 describe('Testes Relatório Projetos', () => {
   it('Deveria criar um projeto e retornar status code 200', done => {
     request.post(
@@ -82,6 +86,23 @@ describe('Testes Relatório Projetos', () => {
         expect(response.statusCode).to.equal(200);
         expect(obj[0].projetoId).to.equal(projetoPost.id);
         expect(obj[0].numeroAcessos).to.equal(0);
+        done();
+      }
+    );
+  });
+  // eslint-disable-next-line max-len
+  it('Deveria tentar dar update em um Relatório e retornar status code 404 - Projeto não existe', done => {
+    request.patch(
+      {
+        headers: {'content-type': 'application/json'},
+        url: `${baseUrl}/relatorioProjetos/1`,
+        body: JSON.stringify(relatorioPostError),
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(404);
+        expect(obj.error.message).to.equal('Projeto não encontrado.');
         done();
       }
     );
