@@ -9,6 +9,9 @@
   "properties": {
     "aprovado": {
       "type": "boolean"
+    },
+    "rank": {
+      "type": "number"
     }
   },
   "validations": [],
