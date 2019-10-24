@@ -53,8 +53,7 @@ module.exports = function(Projeto) {
         if (atualParticipantes > limiteParticipantes) {
           const error = new Error();
 
-          error.message =
-            'Quantidade atual de participantes excede o limite permitido.';
+          error.message = 'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -68,8 +67,7 @@ module.exports = function(Projeto) {
         if (atualParticipantes > limiteParticipantes) {
           const error = new Error();
 
-          error.message =
-            'Quantidade atual de participantes excede o limite permitido.';
+          error.message = 'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -78,39 +76,56 @@ module.exports = function(Projeto) {
     }
   });
 
+  // Verifica se o Docente existe
+  Projeto.observe('before save', async (ctx, next) => {
+    if (ctx.isNewInstance) {
+      const newProjeto = ctx.instance;
+      const Docente = ctx.app.models.Docente;
+
+      try {
+        const docenteProjeto = await Docente.findById(newProjeto.docenteId);
+
+        if (docenteProjeto) return next();
+
+        const error = new Error();
+
+        error.status = 404;
+        error.message = 'Docente não encontrado.';
+
+        return next(error);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  });
+
   // Cria o modelo do relatorio para o projeto instanciado
   Projeto.afterRemote('create', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     const dataAtual = Date.now();
-    relatorioProjeto.create(
-      {dataCriacao: dataAtual, projetoId: projetoInstance.id},
-      (err, obj) => {
-        if (err) return next(err);
+    relatorioProjeto.create({dataCriacao: dataAtual, projetoId: projetoInstance.id}, (err, obj) => {
+      if (err) return next(err);
 
-        return next();
-      }
-    );
+      return next();
+    });
   });
 
   // Incremento do número de acessos para o projeto
   Projeto.afterRemote('findById', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
-    relatorioProjeto.findOne(
-      {where: {projetoId: projetoInstance.id}},
-      (err, relatorio) => {
-        if (err) return next(err);
+    relatorioProjeto.findOne({where: {projetoId: projetoInstance.id}}, (err, relatorio) => {
+      if (err) return next(err);
 
-        relatorio.updateAttribute(
-          'numeroAcessos',
-          relatorio.numeroAcessos + 1,
-          (err, updatedRelatorio) => {
-            if (err) return next(err);
-            else return next();
-          }
-        );
-      }
-    );
+      relatorio.updateAttribute(
+        'numeroAcessos',
+        relatorio.numeroAcessos + 1,
+        (err, updatedRelatorio) => {
+          if (err) return next(err);
+          else return next();
+        }
+      );
+    });
   });
 };

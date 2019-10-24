@@ -43,7 +43,16 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "docente": {
+      "type": "belongsTo",
+      "model": "Docente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }
