@@ -1,4 +1,5 @@
 const request = require('request');
+const rp = require('request-promise-native');
 const expect = require('chai').expect;
 
 const baseUrl = 'http://localhost:3001/api';
@@ -88,48 +89,33 @@ describe('Modelo Discente', () => {
       );
     });
 
-    it('Deveria retornar status 200 e atualizar os atributos ao atualizar um Discente', done => {
-      request.patch(
-        {
+    it('Deveria retornar status 401 ao tentar atualizar os atributos de um Discente sem se identificar', async () => {
+      try {
+        const response = await rp.patch({
           headers: {
             'content-type': 'application/json',
             Accept: 'application/json'
           },
           url: `${baseUrl}/Discentes/${postTest.id}`,
           body: JSON.stringify(updateTest)
-        },
-        (error, response, body) => {
-          const obj = JSON.parse(response.body);
+        });
 
-          expect(response.statusCode).to.equal(200);
-          expect(obj.ra).to.equal(updateTest.ra);
-          expect(obj.curso).to.equal(updateTest.curso);
-          expect(obj.turno).to.equal(updateTest.turno);
-          expect(obj.campus).to.equal(updateTest.campus);
-          expect(obj.serie).to.equal(updateTest.serie);
-          expect(obj.situacaoAcademica).to.equal(updateTest.situacaoAcademica);
-          done();
-        }
-      );
+        expect(response.statusCode).to.equal(401);
+      } catch (err) {}
     });
 
-    it('Deveria retornar status 200 e count 1 ao remover um Discente', done => {
-      request.delete(
-        {
+    it('Deveria retornar status 401 ao tentar remover um Discente sem se identificar', async () => {
+      try {
+        const response = await rp.delete({
           headers: {
             'content-type': 'application/json',
             Accept: 'application/json'
           },
           url: `${baseUrl}/Discentes/${postTest.id}`
-        },
-        (error, response, body) => {
-          const obj = JSON.parse(response.body);
+        });
 
-          expect(response.statusCode).to.equal(200);
-          expect(obj.count).to.equal(1);
-          done();
-        }
-      );
+        expect(response.statusCode).to.equal(401);
+      } catch (err) {}
     });
 
     describe('Testes de duplicação e integridade de dados', () => {

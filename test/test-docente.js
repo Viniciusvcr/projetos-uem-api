@@ -82,7 +82,7 @@ describe('Modelo Docente', () => {
       );
     });
 
-    it('Deveria retornar status 200 e atualizar atributos ao atualizar um Docente', done => {
+    it('Deveria retornar status 401 ao tentar atualizar atributos de um Docente sem se identificar', done => {
       request.patch(
         {
           headers: {
@@ -95,18 +95,13 @@ describe('Modelo Docente', () => {
         (error, response, body) => {
           const obj = JSON.parse(response.body);
 
-          expect(response.statusCode).to.equal(200);
-          expect(obj.matricula).to.equal(updateTest.matricula);
-          expect(obj.cargo).to.equal(updateTest.cargo);
-          expect(obj.lotacao).to.equal(updateTest.lotacao);
-          expect(obj.situacao).to.equal(updateTest.situacao);
-          expect(obj.vencimentoContrato).to.equal(updateTest.vencimentoContrato);
+          expect(response.statusCode).to.equal(401);
           done();
         }
       );
     });
 
-    it('Deveria retornar status 200 e count 1 ao remover um Docente', done => {
+    it('Deveria retornar status 401 ao tentar remover um Docente sem se identificar', done => {
       request.delete(
         {
           headers: {
@@ -118,8 +113,7 @@ describe('Modelo Docente', () => {
         (error, response, body) => {
           const obj = JSON.parse(response.body);
 
-          expect(response.statusCode).to.equal(200);
-          expect(obj.count).to.equal(1);
+          expect(response.statusCode).to.equal(401);
           done();
         }
       );

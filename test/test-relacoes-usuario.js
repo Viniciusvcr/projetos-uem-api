@@ -6,7 +6,7 @@ const baseUrlDiscente = 'http://localhost:3001/api/Discentes';
 const baseUrlUsuario = 'http://localhost:3001/api/Usuarios';
 
 const docente = {
-  matricula: '123456',
+  matricula: '654321',
   cargo: 'Professor',
   lotacao: 'string',
   situacao: 'string',
@@ -14,7 +14,7 @@ const docente = {
 };
 
 const discente = {
-  ra: '104016',
+  ra: '123456',
   curso: 'Ciência da Computação',
   turno: 'Integral',
   campus: 'Maringá',
