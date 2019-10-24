@@ -87,5 +87,13 @@
         }
       }
     }
+  },
+  "Projeto": {
+    "dataSource": "db",
+    "public": true
+  },
+  "relatorioProjeto": {
+    "dataSource": "db",
+    "public": true
   }
 }
