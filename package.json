@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "NODE_ENV='dev' node .",
-    "test": "mocha --timeout 5000",
+    "test": "mocha --timeout 5000 --sort",
     "posttest": "npm run lint"
   },
   "dependencies": {
