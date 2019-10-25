@@ -11,9 +11,7 @@ module.exports = function(app) {
     // const email =
     //   app.dataSources.email.connector.dataSource.settings.transports[0];
 
-    console.log(
-      `${boldWhite}Ambiente: ${boldRed}'${process.env.NODE_ENV}'${reset}`
-    );
+    console.log(`${boldWhite}Ambiente: ${boldRed}'${process.env.NODE_ENV}'${reset}`);
     console.log(
       // eslint-disable-next-line max-len
       `${boldWhite}Banco de dados: ${boldRed}'${db.connector.name}:${db.connector.settings.database}'${reset}`
@@ -49,7 +47,7 @@ module.exports = function(app) {
             {
               principalType: RoleMapping.USER,
               principalId: user.id,
-              roleId: role.id,
+              roleId: role.id
             },
             (err, instance, created) => {
               if (err) {
@@ -57,9 +55,9 @@ module.exports = function(app) {
               }
 
               if (created) {
-                console.log(`${user.username} se tornou um ${role.name}!`);
+                console.log(`    ${user.username} se tornou um ${role.name}!`);
               } else {
-                console.log(`Admin ${user.username} atualizado!`);
+                console.log(`    Admin ${user.username} atualizado!`);
               }
             }
           );
@@ -80,9 +78,9 @@ module.exports = function(app) {
           if (err) throw err;
 
           if (roleCreated) {
-            console.log(`Role "${roleInstance.name}" criada!`);
+            console.log(`    Role "${roleInstance.name}" criada!`);
           } else {
-            console.log(`"${roleInstance.name}" já existe no Banco de Dados.`);
+            console.log(`    "${roleInstance.name}" já existe no Banco de Dados.`);
           }
         }
       );
@@ -106,25 +104,18 @@ module.exports = function(app) {
 
       if (modelDs) {
         if (model != 'Email') {
-          console.log(
-            // eslint-disable-next-line max-len
-            `Verificando se "${model}" está criado e atualizado no Banco de Dados...`
-          );
           mysql.isActual(model, (err, actual) => {
             if (err) throw err;
 
             if (actual) {
-              console.log(
-                `Modelo "${model}" está atualizado no Banco de Dados`
-              );
+              console.log(`  Modelo "${model}" está atualizado no Banco de Dados`);
               modelActions(model);
             } else {
-              console.log(`Diferença encontrada! Atualizando "${model}"...`);
               mysql.autoupdate(model, (err, result) => {
                 if (err) throw err;
 
                 modelActions(model);
-                console.log(`"${model}" atualizado com sucesso!`);
+                console.log(`  '${model}' atualizado com sucesso!`);
               });
             }
           });

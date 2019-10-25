@@ -7,18 +7,20 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "NODE_ENV='dev' node .",
+    "start": "DS='projetos_uem' DSPASSWORD='123' NODE_ENV='dev' node .",
+    "start-mem": "NODE_ENV='mem' node .",
     "test": "mocha --timeout 5000 --sort",
     "posttest": "npm run lint"
   },
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
-    "isemail": "^3.2.0",
     "helmet": "^3.21.1",
+    "isemail": "^3.2.0",
     "loopback": "^3.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.2.0",
+    "loopback-connector-mysql": "^5.4.2",
     "loopback-content-range": "^2.0.0",
     "loopback3-xtotalcount": "^0.1.2",
     "serve-favicon": "^2.0.1",
