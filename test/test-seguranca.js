@@ -19,8 +19,7 @@ const modelDiscenteUpdateInfo = {
   turno: 'Integral',
   campus: 'Sede',
   serie: 4,
-  situacaoAcademica: 'Matriculado',
-  usuarioId: ''
+  situacaoAcademica: 'Matriculado'
 };
 
 const modelDocenteUpdateInfo = {
@@ -65,26 +64,38 @@ const login = async () => {
     const loginDiscenteObj = JSON.parse(loginDiscente);
     const loginDocenteObj = JSON.parse(loginDocente);
 
+    docente.id = loginDocenteObj.userId;
+    docente.token = loginDocenteObj.id;
+    docente.info = loginDocenteObj.user;
     discente.id = loginDiscenteObj.userId;
     discente.token = loginDiscenteObj.id;
     discente.info = loginDiscenteObj.user;
 
-    usuarioDiscenteUpdateInfo.discenteId = discente.info.discenteId;
+    const resDiscente = await request.get({
+      headers: {'content-type': 'application/json', Accept: 'application/json'},
+      url: `${baseUrlUsuario}/${discente.id}?filter=${JSON.stringify({include: 'discente'})}`
+    });
 
-    docente.id = loginDocenteObj.id;
-    docente.token = loginDocenteObj.id;
-    docente.info = loginDocenteObj.user;
+    const resDocente = await request.get({
+      headers: {'content-type': 'application/json', Accept: 'application/json'},
+      url: `${baseUrlUsuario}/${docente.id}?filter=${JSON.stringify({include: 'docente'})}`
+    });
+
+    const objResDiscente = JSON.parse(resDiscente);
+    const objResDocente = JSON.parse(resDocente);
+
+    discente.discenteId = objResDiscente.discente.id;
+    docente.docenteId = objResDocente.docente.id;
+    return true;
   } catch (err) {
-    console.error(err);
+    return false;
   }
-
-  return true;
 };
+
 describe('Testes de Segurança', () => {
-  describe('Testes de Segurança do Modelo Usuário', () => {
+  describe('Testes de Segurança do Modelo Discente', () => {
     it('Deveria retornar 200 ao tentar atualizar as próprias informações', async () => {
       await login();
-
       try {
         const response = await request.patch({
           headers: {
@@ -92,12 +103,12 @@ describe('Testes de Segurança', () => {
             Accept: 'application/json',
             Authorization: discente.token
           },
-          url: `${baseUrlUsuario}/${discente.id}`,
-          body: JSON.stringify(usuarioDiscenteUpdateInfo)
+          url: `${baseUrlDiscente}/${discente.discenteId}`,
+          body: JSON.stringify(modelDiscenteUpdateInfo)
         });
 
         const obj = JSON.parse(response);
-        expect(obj.nome).to.equal(usuarioDiscenteUpdateInfo.nome);
+        expect(obj.nome).to.equal(modelDiscenteUpdateInfo.nome);
       } catch (err) {
         throw err;
       }
@@ -111,117 +122,15 @@ describe('Testes de Segurança', () => {
             Accept: 'application/json',
             Authorization: discente.token
           },
-          url: `${baseUrlUsuario}/${discente.id}`
+          url: `${baseUrlDiscente}/${discente.discenteId}`
         });
 
         const obj = JSON.parse(response);
-
         expect(obj.count).to.equal(1);
       } catch (err) {
-        console.log(err);
         throw err;
       }
     });
-
-    it('Deveria retornar erro ao tentar editar o cadastro de outro usuário', async () => {
-      try {
-        await request.patch({
-          headers: {
-            'content-type': 'application/json',
-            Accept: 'application/json',
-            Authorization: docente.token
-          },
-          url: `${baseUrlUsuario}/${discente.id}`,
-          body: JSON.stringify(usuarioDiscenteUpdateInfo)
-        });
-
-        throw new Error('Deu certo');
-      } catch (err) {
-        const obj = JSON.parse(err.error);
-
-        expect(obj.error.statusCode).to.equal(401);
-      }
-    });
-
-    it('Deveria retornar erro ao tentar deletar um cadastro de outro Usuário', async () => {
-      try {
-        await request.delete({
-          headers: {
-            'content-type': 'application/json',
-            Accept: 'application/json',
-            Authorization: docente.token
-          },
-          url: `${baseUrlUsuario}/${discente.id}`
-        });
-
-        throw new Error('Deu certo');
-      } catch (err) {
-        const obj = JSON.parse(err.error);
-
-        expect(obj.error.statusCode).to.equal(401);
-      }
-    });
-
-    it('Deveria retornar erro ao tentar cadastrar um novo Usuário se já logado', async () => {
-      try {
-        await request.post({
-          headers: {
-            'content-type': 'application/json',
-            Accept: 'application/json',
-            Authorization: docente.token // Passar um token quer dizer estar logado no sistema
-          },
-          url: baseUrlUsuario,
-          body: JSON.stringify(docente.info)
-        });
-      } catch (err) {
-        const obj = JSON.parse(err.error);
-
-        expect(obj.error.statusCode).to.equal(401);
-      }
-    });
-  });
-
-  describe('Testes de Segurança do Modelo Discente', () => {
-    // it('Deveria retornar 200 ao tentar atualizar as próprias informações', async () => {
-    //   await login();
-
-    //   try {
-    //     const response = await request.patch({
-    //       headers: {
-    //         'content-type': 'application/json',
-    //         Accept: 'application/json',
-    //         Authorization: discente.token
-    //       },
-    //       url: `${baseUrlDiscente}/${discente.info.discenteId}`,
-    //       body: JSON.stringify(modelDiscenteUpdateInfo)
-    //     });
-
-    //     const obj = JSON.parse(response);
-    //     expect(obj.nome).to.equal(modelDiscenteUpdateInfo.nome);
-    //   } catch (err) {
-    //     throw err;
-    //   }
-    // });
-
-    // it('Deveria retornar count 1 ao tentar deletar as próprias informações', async () => {
-    //   try {
-    //     const response = await request.delete({
-    //       headers: {
-    //         'content-type': 'application/json',
-    //         Accept: 'application/json',
-    //         Authorization: discente.token
-    //       },
-    //       url: `${baseUrlDiscente}/${discente.info.discenteId}`
-    //     });
-
-    //     const obj = JSON.parse(response);
-
-    //     expect(obj.count).to.equal(1);
-    //   } catch (err) {
-    //     console.log(err);
-    //     throw err;
-    //   }
-    // });
 
     it('Deveria retornar erro ao tentar editar o cadastro de outro Discente', async () => {
       try {
@@ -284,47 +193,44 @@ describe('Testes de Segurança', () => {
   });
 
   describe('Testes de Segurança do Modelo Docente', () => {
-    // it('Deveria retornar 200 ao tentar atualizar as próprias informações', async () => {
-    //   await login();
+    it('Deveria retornar 200 ao tentar atualizar as próprias informações', async () => {
+      try {
+        const response = await request.patch({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: docente.token
+          },
+          url: `${baseUrlDocente}/${docente.docenteId}`,
+          body: JSON.stringify(modelDocenteUpdateInfo)
+        });
 
-    //   try {
-    //     const response = await request.patch({
-    //       headers: {
-    //         'content-type': 'application/json',
-    //         Accept: 'application/json',
-    //         Authorization: discente.token
-    //       },
-    //       url: `${baseUrlDocente}/${docente.info.docenteId}`,
-    //       body: JSON.stringify(modelDocenteUpdateInfo)
-    //     });
+        const obj = JSON.parse(response);
+        expect(obj.lotacao).to.equal(modelDocenteUpdateInfo.lotacao);
+        expect(obj.situacao).to.equal(modelDocenteUpdateInfo.situacao);
+      } catch (err) {
+        throw err;
+      }
+    });
 
-    //     const obj = JSON.parse(response);
-    //     expect(obj.lotacao).to.equal(modelDocenteUpdateInfo.lotacao);
-    //     expect(obj.situacao).to.equal(modelDocenteUpdateInfo.situacao);
-    //   } catch (err) {
-    //     throw err;
-    //   }
-    // });
+    it('Deveria retornar count 1 ao tentar deletar as próprias informações', async () => {
+      try {
+        const response = await request.delete({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: docente.token
+          },
+          url: `${baseUrlDocente}/${docente.docenteId}`
+        });
 
-    // it('Deveria retornar count 1 ao tentar deletar as próprias informações', async () => {
-    //   try {
-    //     const response = await request.delete({
-    //       headers: {
-    //         'content-type': 'application/json',
-    //         Accept: 'application/json',
-    //         Authorization: docente.token
-    //       },
-    //       url: `${baseUrlDocente}/${docente.info.docenteId}`
-    //     });
+        const obj = JSON.parse(response);
 
-    //     const obj = JSON.parse(response);
-
-    //     expect(obj.count).to.equal(1);
-    //   } catch (err) {
-    //     console.log(err);
-    //     throw err;
-    //   }
-    // });
+        expect(obj.count).to.equal(1);
+      } catch (err) {
+        throw err;
+      }
+    });
 
     it('Deveria retornar erro ao tentar editar o cadastro de outro Docente', async () => {
       try {
@@ -332,7 +238,7 @@ describe('Testes de Segurança', () => {
           headers: {
             'content-type': 'application/json',
             Accept: 'application/json',
-            Authorization: docente.token
+            Authorization: discente.token
           },
           url: `${baseUrlDocente}/${docente.id}`,
           body: JSON.stringify(modelDocenteUpdateInfo)
@@ -378,6 +284,103 @@ describe('Testes de Segurança', () => {
         });
 
         throw new Error('Deu certo');
+      } catch (err) {
+        const obj = JSON.parse(err.error);
+
+        expect(obj.error.statusCode).to.equal(401);
+      }
+    });
+  });
+
+  describe('Testes de Segurança do Modelo Usuário', () => {
+    it('Deveria retornar 200 ao tentar atualizar as próprias informações', async () => {
+      try {
+        const response = await request.patch({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: discente.token
+          },
+          url: `${baseUrlUsuario}/${discente.id}`,
+          body: JSON.stringify(usuarioDiscenteUpdateInfo)
+        });
+
+        const obj = JSON.parse(response);
+        expect(obj.nome).to.equal(usuarioDiscenteUpdateInfo.nome);
+      } catch (err) {
+        throw err;
+      }
+    });
+
+    it('Deveria retornar count 1 ao tentar deletar as próprias informações', async () => {
+      try {
+        const response = await request.delete({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: discente.token
+          },
+          url: `${baseUrlUsuario}/${discente.id}`
+        });
+
+        const obj = JSON.parse(response);
+
+        expect(obj.count).to.equal(1);
+      } catch (err) {
+        throw err;
+      }
+    });
+
+    it('Deveria retornar erro ao tentar editar o cadastro de outro usuário', async () => {
+      try {
+        await request.patch({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: docente.token
+          },
+          url: `${baseUrlUsuario}/${discente.id}`,
+          body: JSON.stringify(usuarioDiscenteUpdateInfo)
+        });
+
+        throw new Error('Deu certo');
+      } catch (err) {
+        const obj = JSON.parse(err.error);
+
+        expect(obj.error.statusCode).to.equal(401);
+      }
+    });
+
+    it('Deveria retornar erro ao tentar deletar um cadastro de outro Usuário', async () => {
+      try {
+        await request.delete({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: docente.token
+          },
+          url: `${baseUrlUsuario}/${discente.id}`
+        });
+
+        throw new Error('Deu certo');
+      } catch (err) {
+        const obj = JSON.parse(err.error);
+
+        expect(obj.error.statusCode).to.equal(401);
+      }
+    });
+
+    it('Deveria retornar erro ao tentar cadastrar um novo Usuário se já logado', async () => {
+      try {
+        await request.post({
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json',
+            Authorization: docente.token // Passar um token quer dizer estar logado no sistema
+          },
+          url: baseUrlUsuario,
+          body: JSON.stringify(docente.info)
+        });
       } catch (err) {
         const obj = JSON.parse(err.error);
 

@@ -37,7 +37,16 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "usuario": {
+      "type": "belongsTo",
+      "model": "Usuario",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [
     {
       "accessType": "*",
