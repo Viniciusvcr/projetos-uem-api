@@ -22,19 +22,19 @@
       "foreignKey": "",
       "options": {
         "nestRemoting": true
-      },
-      "discente": {
-        "type": "belongsTo",
-        "model": "Discente",
-        "foreignKey": "",
-        "options": {
-          "nestRemoting": true
-        }
       }
     },
     "processoSeletivo": {
       "type": "belongsTo",
       "model": "processoSeletivo",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "discente": {
+      "type": "belongsTo",
+      "model": "Discente",
       "foreignKey": "",
       "options": {
         "nestRemoting": true
