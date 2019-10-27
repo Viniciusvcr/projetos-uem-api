@@ -40,7 +40,7 @@
     "dataSource": "db",
     "public": true
   },
-  "inscrito": {
+  "Inscrito": {
     "dataSource": "db",
     "public": true
   },

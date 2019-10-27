@@ -1,6 +1,6 @@
 {
-  "name": "inscrito",
-  "plural": "inscritos",
+  "name": "Inscrito",
+  "plural": "Inscritos",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
