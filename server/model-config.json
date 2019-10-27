@@ -95,5 +95,17 @@
   "relatorioProjeto": {
     "dataSource": "db",
     "public": true
+  },
+  "Area": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Subarea": {
+    "dataSource": "db",
+    "public": true
+  },
+  "AcessoMensalUsuarios": {
+    "dataSource": "db",
+    "public": true
   }
 }
