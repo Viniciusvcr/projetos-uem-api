@@ -4,5 +4,8 @@
     "comma-dangle": "off",
     "max-len": ["error", { "code": 100 }],
     "prefer-const": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }
