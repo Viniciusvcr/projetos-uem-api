@@ -94,7 +94,7 @@ describe('Subarea', () => {
           'content-type': 'application/json',
           Accept: 'application/json'
         },
-        url: `${baseUrl}/Areas`,
+        url: `${baseUrl}/Subareas`,
         body: JSON.stringify(subareaPost)
       },
       (error, response, body) => {

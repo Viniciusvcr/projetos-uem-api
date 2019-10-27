@@ -161,8 +161,51 @@ module.exports = function(Projeto) {
         } catch (err) {
           return next(err);
         }
+      } else return next();
+    }
+  });
+
+  // Verifica se a Subarea existe
+  Projeto.observe('before save', async (ctx, next) => {
+    if (ctx.isNewInstance) {
+      const newProjeto = ctx.instance;
+      const Subarea = Projeto.app.models.Subarea;
+
+      try {
+        const subareaProjeto = await Subarea.findById(newProjeto.subareaId);
+
+        if (subareaProjeto) return next();
+
+        const error = new Error();
+
+        error.status = 404;
+        error.message = 'Subarea não encontrada';
+
+        return next(error);
+      } catch (err) {
+        return next(err);
       }
-      return next();
+    } else {
+      const subareaId = ctx.data.subareaId;
+
+      if (subareaId) {
+        const Subarea = Projeto.app.models.Subarea;
+
+        try {
+          const subareaProjeto = await Subarea.findById(subareaId);
+
+          if (subareaProjeto) return next();
+
+          const error = new Error();
+
+          error.status = 404;
+          error.message = 'Subarea não encontrada.';
+
+          return next(error);
+        } catch (err) {
+          return next(err);
+        }
+      } else return next();
     }
   });
 
