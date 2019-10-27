@@ -92,7 +92,9 @@
     "dataSource": "db",
     "public": true
   },
-  "relatorioProjeto": {},
+  "relatorioProjeto": {
+    "dataSource": "db"
+  },
   "Area": {
     "dataSource": "db",
     "public": true
