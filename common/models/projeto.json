@@ -51,6 +51,22 @@
       "options": {
         "nestRemoting": true
       }
+    },
+    "area": {
+      "type": "belongsTo",
+      "model": "Area",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "subarea": {
+      "type": "belongsTo",
+      "model": "Subarea",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [],

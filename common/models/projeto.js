@@ -96,6 +96,51 @@ module.exports = function(Projeto) {
       } catch (err) {
         return next(err);
       }
+    } else {
+      const docenteId = ctx.data.docenteId;
+
+      if (docenteId) {
+        const Docente = Projeto.app.models.Docente;
+
+        try {
+          const docenteProjeto = await Docente.findById(docenteId);
+
+          if (docenteProjeto) return next();
+
+          const error = new Error();
+
+          error.status = 404;
+          error.message = 'Docente não encontrado.';
+
+          return next(error);
+        } catch (err) {
+          return next(err);
+        }
+      }
+      return next();
+    }
+  });
+
+  // Verifica se a Area existe
+  Projeto.observe('before save', async (ctx, next) => {
+    if (ctx.isNewInstance) {
+      const newProjeto = ctx.instance;
+      const Area = Projeto.app.models.Area;
+
+      try {
+        const areaProjeto = await Area.findById(newProjeto.areaId);
+
+        if (areaProjeto) return next();
+
+        const error = new Error();
+
+        error.status = 404;
+        error.message = 'Area não encontrada';
+
+        return next(error);
+      } catch (err) {
+        return next(err);
+      }
     }
   });
 

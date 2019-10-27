@@ -28,6 +28,14 @@ const docentePost = {
   vencimentoContrato: '2020-10-17T00:00:00.000Z'
 };
 
+const areaPost = {
+  nome: 'Ciências humanas'
+};
+
+const subareaPost = {
+  nome: 'Ciência da humanidade'
+};
+
 describe('Docente', () => {
   it('Deveria criar um projeto e retornar status code 200', done => {
     request.post(
@@ -47,6 +55,56 @@ describe('Docente', () => {
         expect(obj.lotacao).to.equal(docentePost.lotacao);
         expect(obj.situacao).to.equal(docentePost.situacao);
         expect(obj.vencimentoContrato).to.equal(docentePost.vencimentoContrato);
+        done();
+      }
+    );
+  });
+});
+
+describe('Area', () => {
+  it('Deveria criar uma instancia de área e retornar 200', done => {
+    request.post(
+      {
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json'
+        },
+        url: `${baseUrl}/Areas`,
+        body: JSON.stringify(areaPost)
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        areaPost.id = obj.id;
+        projetoPost['areaId'] = obj.id;
+
+        expect(response.statusCode).to.equal(200);
+        expect(obj.nome).to.equal('Ciências humanas');
+        done();
+      }
+    );
+  });
+});
+
+describe('Subarea', () => {
+  it('Deveria criar uma instancia de subarea e retornar 200', done => {
+    request.post(
+      {
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json'
+        },
+        url: `${baseUrl}/Areas`,
+        body: JSON.stringify(subareaPost)
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        subareaPost.id = obj.id;
+        projetoPost['subareaId'] = obj.id;
+
+        expect(response.statusCode).to.equal(200);
+        expect(obj.nome).to.equal('Ciência da humanidade');
         done();
       }
     );
