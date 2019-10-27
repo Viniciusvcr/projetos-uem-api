@@ -15,7 +15,24 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "projeto": {
+      "type": "belongsTo",
+      "model": "Projeto",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "processoSeletivo": {
+      "type": "belongsTo",
+      "model": "processoSeletivo",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

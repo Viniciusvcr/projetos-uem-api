@@ -8,22 +8,31 @@ const baseUrl = 'http://localhost:3001/api';
 const postTest = {
   prerequisitos: 'saber codar em javascript',
   descricao: 'nesse projeto vc vai aprender javascript',
-  dataInicio: '2019-10-19T17:04:53.015Z',
-  encerrado: false,
+  dataInicio: '2019-11-20T17:04:53.015Z',
+  encerrado: false
 };
 
 const invalidDateTest = {
   prerequisitos: 'saber codar em javascript',
   descricao: 'nesse projeto vc vai aprender javascript',
   dataInicio: '2017-10-19T17:04:53.015Z',
-  encerrado: false,
+  encerrado: false
 };
 
 const updateTest = {
   prerequisitos: 'agora nao precisa saber codar em javascript',
   descricao: 'nesse projeto vc vai aprender python',
-  dataInicio: '2019-11-19T17:04:53.015Z',
-  encerrado: false,
+  dataInicio: '2019-11-25T17:04:53.015Z',
+  encerrado: false
+};
+
+const projetoPost = {
+  titulo: 'Pesquisa de software',
+  dataInicio: new Date(2019, 10, 1, 0, 0, 0, 0),
+  dataTermino: new Date(2020, 9, 30, 0, 0, 0, 0),
+  limiteParticipantes: 3,
+  resumo: 'Pesquisa sobre Engenharia de Software',
+  tipo: 'PIC'
 };
 
 describe('Modelo Processo Seletivo', () => {
@@ -33,7 +42,7 @@ describe('Modelo Processo Seletivo', () => {
         {
           headers: {'content-type': 'application/json'},
           url: `${baseUrl}/processosSeletivos`,
-          body: JSON.stringify(postTest),
+          body: JSON.stringify(postTest)
         },
         (error, response, body) => {
           const obj = JSON.parse(response.body);
@@ -54,10 +63,10 @@ describe('Modelo Processo Seletivo', () => {
         {
           headers: {
             'content-type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json'
           },
           url: `${baseUrl}/processosSeletivos/${postTest['id']}`,
-          body: JSON.stringify(updateTest),
+          body: JSON.stringify(updateTest)
         },
         (error, responsePatch, body) => {
           const obj = JSON.parse(responsePatch.body);
@@ -76,9 +85,9 @@ describe('Modelo Processo Seletivo', () => {
         {
           headers: {
             'content-type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json'
           },
-          url: `${baseUrl}/processosSeletivos/${postTest['id']}`,
+          url: `${baseUrl}/processosSeletivos/${postTest['id']}`
         },
         (error, responsePatch, body) => {
           const obj = JSON.parse(responsePatch.body);
@@ -97,10 +106,10 @@ describe('Modelo Processo Seletivo', () => {
         {
           headers: {
             'content-type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json'
           },
           url: `${baseUrl}/processosSeletivos/${postTest['id']}`,
-          body: JSON.stringify(updateTest),
+          body: JSON.stringify(updateTest)
         },
         (error, responsePatch, body) => {
           const obj = JSON.parse(responsePatch.body);
@@ -118,15 +127,51 @@ describe('Modelo Processo Seletivo', () => {
         {
           headers: {
             'content-type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json'
           },
           url: `${baseUrl}/processosSeletivos`,
-          body: JSON.stringify(invalidDateTest),
+          body: JSON.stringify(invalidDateTest)
         },
         (error, responsePatch, body) => {
           const obj = JSON.parse(responsePatch.body);
           expect(responsePatch.statusCode).to.equal(400);
           done();
+        }
+      );
+    });
+  });
+
+  describe('Teste de vinculação com projeto', () => {
+    it('Deveria retornar status 200 o processo seletivo com a chave estrangeira igual ao id do projeto criado', done => {
+      request.post(
+        {
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json'
+          },
+          url: `${baseUrl}/Projetos`,
+          body: JSON.stringify(projetoPost)
+        },
+        (error, responsePatch, body) => {
+          const objProjeto = JSON.parse(responsePatch.body);
+          const projetoId = objProjeto.id;
+          updateTest.projetoId = projetoId;
+          request.post(
+            {
+              headers: {
+                'content-type': 'application/json',
+                Accept: 'application/json'
+              },
+              url: `${baseUrl}/processosSeletivos`,
+              body: JSON.stringify(updateTest)
+            },
+            (error, responsePatch, body) => {
+              const obj = JSON.parse(responsePatch.body);
+              expect(responsePatch.statusCode).to.equal(200);
+              expect(obj.projetoId).to.equal(objProjeto.id);
+              done();
+            }
+          );
         }
       );
     });
