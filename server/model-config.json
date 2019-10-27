@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "db",
@@ -40,6 +41,77 @@
     "public": true
   },
   "inscrito": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Usuario": {
+    "dataSource": "db",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "find": true,
+          "findById": true,
+          "create": true,
+          "prototype.patchAttributes": true,
+          "deleteById": true,
+          "login": true,
+          "logout": true,
+          "changePassword": true,
+          "resetPassword": true
+        }
+      }
+    }
+  },
+  "Docente": {
+    "dataSource": "db",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "find": true,
+          "findById": true,
+          "create": true,
+          "prototype.patchAttributes": true,
+          "deleteById": true
+        }
+      }
+    }
+  },
+  "Discente": {
+    "dataSource": "db",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "find": true,
+          "findById": true,
+          "create": true,
+          "prototype.patchAttributes": true,
+          "deleteById": true
+        }
+      }
+    }
+  },
+  "Projeto": {
+    "dataSource": "db",
+    "public": true
+  },
+  "relatorioProjeto": {
+    "dataSource": "db"
+  },
+  "Area": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Subarea": {
+    "dataSource": "db",
+    "public": true
+  },
+  "AcessoMensalUsuarios": {
     "dataSource": "db",
     "public": true
   }

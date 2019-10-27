@@ -7,13 +7,14 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
+    "start": "NODE_ENV='dev' node .",
     "test": "mocha --timeout 5000",
     "posttest": "npm run lint"
   },
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "isemail": "^3.2.0",
     "helmet": "^3.21.1",
     "loopback": "^3.22.0",
     "loopback-boot": "^2.6.5",
@@ -25,10 +26,12 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-datetime": "^1.5.0",
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
     "mocha": "^6.2.1",
     "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
     "should": "^13.2.3"
   },
   "repository": {

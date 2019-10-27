@@ -1,0 +1,49 @@
+{
+  "name": "Projeto",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "titulo": {
+      "type": "string",
+      "required": true
+    },
+    "dataInicio": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
+    },
+    "dataTermino": {
+      "type": "date"
+    },
+    "limiteParticipantes": {
+      "type": "number"
+    },
+    "atualParticipantes": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "ativo": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "resumo": {
+      "type": "string"
+    },
+    "requisitos": {
+      "type": "string"
+    },
+    "tipo": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
