@@ -56,6 +56,10 @@ const projetoUpdateLimiteError = {
   limiteParticipantes: 2
 };
 
+const projetoUpdateDocenteError = {
+  docenteId: 500
+};
+
 const docentePost = {
   matricula: '12345678',
   cargo: 'Professor',
@@ -273,6 +277,26 @@ describe('Testes Projetos', () => {
 
         expect(response.statusCode).to.equal(400);
         expect(obj.error.message).to.equal('Data de término antecede data de início.');
+        done();
+      }
+    );
+  });
+  // eslint-disable-next-line max-len
+  it('Deveria atualizar os atributos do projeto e retornar status code 400 - Falha ao mandar um docente não existente', done => {
+    request.patch(
+      {
+        headers: {
+          'content-type': 'application/json',
+          Accept: 'application/json'
+        },
+        url: `${baseUrl}/Projetos/${projetoPost.id}`,
+        body: JSON.stringify(projetoUpdateDocenteError)
+      },
+      (error, response, body) => {
+        const obj = JSON.parse(response.body);
+
+        expect(response.statusCode).to.equal(404);
+        expect(obj.error.message).to.equal('Docente não encontrado.');
         done();
       }
     );

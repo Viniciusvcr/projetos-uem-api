@@ -141,6 +141,28 @@ module.exports = function(Projeto) {
       } catch (err) {
         return next(err);
       }
+    } else {
+      const areaId = ctx.data.areaId;
+
+      if (areaId) {
+        const Area = Projeto.app.models.Area;
+
+        try {
+          const areaProjeto = await Area.findById(areaId);
+
+          if (areaProjeto) return next();
+
+          const error = new Error();
+
+          error.status = 404;
+          error.message = 'Area não encontrada.';
+
+          return next(error);
+        } catch (err) {
+          return next(err);
+        }
+      }
+      return next();
     }
   });
 
