@@ -80,7 +80,7 @@ module.exports = function(Projeto) {
   Projeto.observe('before save', async (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
-      const Docente = ctx.app.models.Docente;
+      const Docente = Projeto.app.models.Docente;
 
       try {
         const docenteProjeto = await Docente.findById(newProjeto.docenteId);
