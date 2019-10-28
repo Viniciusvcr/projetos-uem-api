@@ -67,6 +67,14 @@
       "options": {
         "nestRemoting": true
       }
+    },
+    "coorientador": {
+      "type": "belongsTo",
+      "model": "Docente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [],
