@@ -71,7 +71,7 @@
     "coorientador": {
       "type": "belongsTo",
       "model": "Docente",
-      "foreignKey": "",
+      "foreignKey": "coorientadorId",
       "options": {
         "nestRemoting": true
       }
