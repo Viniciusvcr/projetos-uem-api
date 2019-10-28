@@ -44,4 +44,38 @@ module.exports = function(Inscrito) {
       return next();
     }
   });
+  // Verificando se a inscrição é feita com o processo seletivo aberto
+  Inscrito.observe('before save', (ctx, next) => {
+    if (ctx.isNewInstance) {
+      const newInscrito = ctx.instance;
+      const processoSeletivo = Inscrito.app.models.processoSeletivo;
+
+      processoSeletivo.findOne(
+        {
+          where: {
+            id: newInscrito.processoSeletivoId
+          }
+        },
+        (err, processo) => {
+          if (err) return next(err);
+          if (processo) {
+            if (processo.encerrado) {
+              const error = new Error();
+
+              error.message = 'Processo está encerrado!';
+              error.status = 409;
+
+              return next(error);
+            } else {
+              return next();
+            }
+          } else {
+            return next();
+          }
+        }
+      );
+    } else {
+      return next();
+    }
+  });
 };

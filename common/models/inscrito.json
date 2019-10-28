@@ -12,6 +12,12 @@
     },
     "rank": {
       "type": "number"
+    },
+    "curriculo": {
+      "type": "string"
+    },
+    "mensagem": {
+      "type": "string"
     }
   },
   "validations": [],

@@ -18,6 +18,12 @@ const postProcessoSeletivo = {
   dataInicio: '2019-11-20T17:04:53.015Z',
   encerrado: false
 };
+const postProcessoSeletivoEncerrado = {
+  prerequisitos: 'saber codar em javascript',
+  descricao: 'nesse projeto vc vai aprender javascript',
+  dataInicio: '2019-11-20T17:04:53.015Z',
+  encerrado: true
+};
 const postDiscente = {
   ra: '104016',
   curso: 'Ciência da Computação',
@@ -186,6 +192,37 @@ describe('Modelo Processo Seletivo', () => {
           const obj = JSON.parse(responsePatch.body);
           expect(responsePatch.statusCode).to.equal(409);
           done();
+        }
+      );
+    });
+    it('Deveria retornar status 409 porque não se pode se inscrever em um processo encerrado', done => {
+      request.post(
+        {
+          headers: {
+            'content-type': 'application/json',
+            Accept: 'application/json'
+          },
+          url: `${baseUrl}/processosSeletivos`,
+          body: JSON.stringify(postProcessoSeletivoEncerrado)
+        },
+        (error, responsePatch, body) => {
+          const objProcessoSeletivo = JSON.parse(responsePatch.body);
+          const idProcessoSeletivo = objProcessoSeletivo.id;
+          updateTest.processoSeletivoId = idProcessoSeletivo;
+          request.post(
+            {
+              headers: {
+                'content-type': 'application/json',
+                Accept: 'application/json'
+              },
+              url: `${baseUrl}/Inscritos`,
+              body: JSON.stringify(updateTest)
+            },
+            (error, responsePatch, body) => {
+              expect(responsePatch.statusCode).to.equal(409);
+              done();
+            }
+          );
         }
       );
     });
