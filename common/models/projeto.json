@@ -43,7 +43,32 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "area": {
+      "type": "belongsTo",
+      "model": "Area",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "subarea": {
+      "type": "hasOne",
+      "model": "Subarea",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "docente": {
+      "type": "belongsTo",
+      "model": "Docente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }
