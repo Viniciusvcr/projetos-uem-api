@@ -8,7 +8,12 @@ module.exports = function(Inscrito) {
       const Discente = Inscrito.app.models.Discente;
 
       Inscrito.findOne(
-        {where: {projetoId: newInscrito.projetoId, discenteId: newInscrito.discenteId}},
+        {
+          where: {
+            processoSeletivoId: newInscrito.processoSeletivoId,
+            discenteId: newInscrito.discenteId
+          }
+        },
         (err, inscrito) => {
           if (err) return next(err);
           if (inscrito) {

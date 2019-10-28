@@ -16,14 +16,6 @@
   },
   "validations": [],
   "relations": {
-    "projeto": {
-      "type": "belongsTo",
-      "model": "Projeto",
-      "foreignKey": "",
-      "options": {
-        "nestRemoting": true
-      }
-    },
     "processoSeletivo": {
       "type": "belongsTo",
       "model": "processoSeletivo",
