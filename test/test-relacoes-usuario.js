@@ -10,7 +10,8 @@ const docente = {
   cargo: 'Professor',
   lotacao: 'string',
   situacao: 'string',
-  vencimentoContrato: '2020-10-17T00:00:00.000Z'
+  vencimentoContrato: '2020-10-17T00:00:00.000Z',
+  usuarioId: ''
 };
 
 const discente = {
@@ -19,7 +20,8 @@ const discente = {
   turno: 'Integral',
   campus: 'Maringá',
   serie: 3,
-  situacaoAcademica: 'Matriculado'
+  situacaoAcademica: 'Matriculado',
+  usuarioId: ''
 };
 
 const usuarioDiscente = {
@@ -59,54 +61,22 @@ const usuario2 = {
 };
 
 describe('Testes de Relação do Modelo Usuário', () => {
-  it('Deveria retornar 404 e "Cadastro do Docente não encontrado!" ao tentar cadastrar um Usuário Docente sem ter feito o registro do Docente', done => {
-    request.post(
-      {
-        headers: {'content-type': 'application/json'},
-        url: baseUrlUsuario,
-        body: JSON.stringify(usuario1)
-      },
-      (error, response, body) => {
-        const obj = JSON.parse(response.body);
-        expect(response.statusCode).to.equal(400);
-        expect(obj.error.message).to.equal('docenteId faltando na requisição');
-        done();
-      }
-    );
-  });
-
-  it('Deveria retornar 404 e "Cadastro do Discente não encontrado!" ao tentar cadastrar um Usuário Discente sem ter feito o registro do Discente', done => {
-    request.post(
-      {
-        headers: {'content-type': 'application/json'},
-        url: baseUrlUsuario,
-        body: JSON.stringify(usuario2)
-      },
-      (error, response, body) => {
-        const obj = JSON.parse(response.body);
-        expect(response.statusCode).to.equal(400);
-        expect(obj.error.message).to.equal('discenteId faltando na requisição');
-        done();
-      }
-    );
-  });
-
   it('Deveria retornar 200 ao cadastrar um Docente/Usuario', done => {
     request.post(
       {
         headers: {'content-type': 'application/json'},
-        url: baseUrlDocente,
-        body: JSON.stringify(docente)
+        url: baseUrlUsuario,
+        body: JSON.stringify(usuarioDocente)
       },
       (error, response, body) => {
         const obj = JSON.parse(response.body);
 
-        usuarioDocente['docenteId'] = obj.id;
+        docente.usuarioId = obj.id;
         request.post(
           {
             headers: {'content-type': 'application/json'},
-            url: baseUrlUsuario,
-            body: JSON.stringify(usuarioDocente)
+            url: baseUrlDocente,
+            body: JSON.stringify(docente)
           },
           (error, response, body) => {
             expect(response.statusCode).to.equal(200);
@@ -121,18 +91,18 @@ describe('Testes de Relação do Modelo Usuário', () => {
     request.post(
       {
         headers: {'content-type': 'application/json'},
-        url: baseUrlDiscente,
-        body: JSON.stringify(discente)
+        url: baseUrlUsuario,
+        body: JSON.stringify(usuarioDiscente)
       },
       (error, response, body) => {
         const obj = JSON.parse(response.body);
 
-        usuarioDiscente['discenteId'] = obj.id;
+        discente.usuarioId = obj.id;
         request.post(
           {
             headers: {'content-type': 'application/json'},
-            url: baseUrlUsuario,
-            body: JSON.stringify(usuarioDiscente)
+            url: baseUrlDiscente,
+            body: JSON.stringify(discente)
           },
           (error, response, body) => {
             expect(response.statusCode).to.equal(200);

@@ -20,7 +20,7 @@
   "validations": [],
   "relations": {
     "discente": {
-      "type": "belongsTo",
+      "type": "hasOne",
       "model": "Discente",
       "foreignKey": "",
       "options": {
@@ -28,7 +28,7 @@
       }
     },
     "docente": {
-      "type": "belongsTo",
+      "type": "hasOne",
       "model": "Docente",
       "foreignKey": "",
       "options": {

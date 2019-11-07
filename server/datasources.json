@@ -1,6 +1,15 @@
 {
-  "db": {
-    "name": "db",
+  "mem": {
+    "name": "mem",
     "connector": "memory"
+  },
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "${DS}",
+    "password": "${DSPASSWORD}",
+    "name": "db",
+    "connector": "mysql",
+    "user": "root"
   }
 }

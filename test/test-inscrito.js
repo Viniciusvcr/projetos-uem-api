@@ -25,7 +25,7 @@ const postProcessoSeletivoEncerrado = {
   encerrado: true
 };
 const postDiscente = {
-  ra: '104016',
+  ra: '105422',
   curso: 'Ciência da Computação',
   turno: 'Integral',
   campus: 'Maringá',
@@ -33,7 +33,7 @@ const postDiscente = {
   situacaoAcademica: 'Matriculado'
 };
 
-describe('Modelo Processo Seletivo', () => {
+describe('Modelo Inscrito', () => {
   describe('Testes CRUD', () => {
     it('Deveria criar um novo inscrito e retornar status 200', done => {
       request.post(
@@ -124,6 +124,7 @@ describe('Modelo Processo Seletivo', () => {
           const objDiscente = JSON.parse(responsePatch.body);
           const discenteId = objDiscente.id;
           updateTest.discenteId = discenteId;
+          console.log(objDiscente);
           request.post(
             {
               headers: {
