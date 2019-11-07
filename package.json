@@ -7,8 +7,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "DS='projetos_uem' DSPASSWORD='123' NODE_ENV='dev' node .",
-    "start-mem": "NODE_ENV='mem' node .",
+    "start": "DS='projetos_uem' DSPASSWORD='123' MAIL='' MAILPASSWORD='' NODE_ENV='dev' node .",
+    "start-mem": "NODE_ENV='mem' MAIL='' MAILPASSWORD='' node .",
     "test": "mocha --timeout 5000 --sort",
     "posttest": "npm run lint"
   },
@@ -23,6 +23,7 @@
     "loopback-connector-mysql": "^5.4.2",
     "loopback-content-range": "^2.0.0",
     "loopback3-xtotalcount": "^0.1.2",
+    "nodemailer": "^6.3.1",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^3.4.0"
   },

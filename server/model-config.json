@@ -115,5 +115,8 @@
   "AcessoMensalUsuarios": {
     "dataSource": "db",
     "public": true
+  },
+  "Email": {
+    "dataSource": "email"
   }
 }
