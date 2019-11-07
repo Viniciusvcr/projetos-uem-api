@@ -7,18 +7,20 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "NODE_ENV='dev' node .",
-    "test": "mocha --timeout 5000",
+    "start": "DS='projetos_uem' DSPASSWORD='123' NODE_ENV='dev' node .",
+    "start-mem": "NODE_ENV='mem' node .",
+    "test": "mocha --timeout 5000 --sort",
     "posttest": "npm run lint"
   },
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "helmet": "^3.21.2",
     "isemail": "^3.2.0",
-    "helmet": "^3.21.1",
     "loopback": "^3.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.2.0",
+    "loopback-connector-mysql": "^5.4.2",
     "loopback-content-range": "^2.0.0",
     "loopback3-xtotalcount": "^0.1.2",
     "serve-favicon": "^2.0.1",
@@ -29,7 +31,7 @@
     "chai-datetime": "^1.5.0",
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
-    "mocha": "^6.2.1",
+    "mocha": "^6.2.2",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "should": "^13.2.3"

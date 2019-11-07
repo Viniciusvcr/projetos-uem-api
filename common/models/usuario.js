@@ -35,39 +35,6 @@ module.exports = function(Usuario) {
     } else return next();
   });
 
-  // Verifica a existência do Docente/Discente antes de criar o Usuário
-  Usuario.observe('before save', (ctx, next) => {
-    const Docente = Usuario.app.models.Docente;
-    const Discente = Usuario.app.models.Discente;
-    const newUsuario = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
-
-    if (newUsuario.realm == 'Docente') {
-      if (newUsuario.docenteId) {
-        Docente.findById(newUsuario.docenteId, (err, exists) => {
-          if (err) {
-            return next(err);
-          }
-
-          if (exists) {
-            return next();
-          } else return next(error('Cadastro do Docente não encontrado!', 404));
-        });
-      } else return next(error('docenteId faltando na requisição', 400));
-    } else if (newUsuario.realm == 'Discente') {
-      if (newUsuario.discenteId) {
-        Discente.findById(newUsuario.discenteId, (err, exists) => {
-          if (err) {
-            return next(err);
-          }
-
-          if (exists) {
-            return next();
-          } else return next(error('Cadastro do Discente não encontrado!', 404));
-        });
-      } else return next(error('discenteId faltando na requisição', 400));
-    } else return next(); // 'Administrador' e 'Normal' não tem modelo adicional
-  });
-
   // Aplica a função passada no cadastro
   Usuario.observe('after save', (ctx, next) => {
     if (ctx.isNewInstance) {
