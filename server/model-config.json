@@ -59,7 +59,8 @@
           "login": true,
           "logout": true,
           "changePassword": true,
-          "resetPassword": true
+          "resetPassword": true,
+          "sendMail": true
         }
       }
     }

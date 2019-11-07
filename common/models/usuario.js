@@ -73,4 +73,49 @@ module.exports = function(Usuario) {
       });
     } else return next();
   });
+
+  const sendMail = (to, subject, text) => {
+    const Email = Usuario.app.models.Email;
+
+    const message = {
+      to,
+      subject,
+      text
+    };
+
+    return Email.send(message);
+  };
+
+  Usuario.sendMail = async function(to, subject, text, cb) {
+    try {
+      await sendMail(to, subject, text);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  Usuario.remoteMethod('sendMail', {
+    accepts: [
+      {
+        arg: 'to',
+        type: 'array',
+        required: true,
+        description: 'Destinatários do email'
+      },
+      {
+        arg: 'subject',
+        type: 'string',
+        required: true,
+        description: 'Assunto do email'
+      },
+      {
+        arg: 'text',
+        type: 'string',
+        required: true,
+        description: 'Texto do email'
+      }
+    ],
+    http: {path: '/send-email', verb: 'post', status: 204},
+    description: 'Envia um email para Usuários'
+  });
 };
