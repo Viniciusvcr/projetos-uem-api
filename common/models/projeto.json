@@ -43,7 +43,16 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "processoSeletivo": {
+      "type": "hasMany",
+      "model": "processoSeletivo",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

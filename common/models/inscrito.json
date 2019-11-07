@@ -8,10 +8,12 @@
   },
   "properties": {
     "aprovado": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": null
     },
     "rank": {
-      "type": "number"
+      "type": "number",
+      "default": 0
     },
     "curriculo": {
       "type": "string"
