@@ -44,6 +44,14 @@
   },
   "validations": [],
   "relations": {
+    "docente": {
+      "type": "belongsTo",
+      "model": "Docente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
     "area": {
       "type": "belongsTo",
       "model": "Area",
@@ -53,17 +61,17 @@
       }
     },
     "subarea": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "Subarea",
       "foreignKey": "",
       "options": {
         "nestRemoting": true
       }
     },
-    "docente": {
+    "coorientador": {
       "type": "belongsTo",
       "model": "Docente",
-      "foreignKey": "",
+      "foreignKey": "coorientadorId",
       "options": {
         "nestRemoting": true
       }
