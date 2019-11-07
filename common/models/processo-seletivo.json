@@ -1,0 +1,40 @@
+{
+  "name": "processoSeletivo",
+  "plural": "processosSeletivos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "prerequisitos": {
+      "type": "string",
+      "required": true
+    },
+    "descricao": {
+      "type": "string",
+      "required": true
+    },
+    "dataInicio": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "encerrado": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "projeto": {
+      "type": "belongsTo",
+      "model": "Projeto",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

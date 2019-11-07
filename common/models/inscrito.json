@@ -1,0 +1,44 @@
+{
+  "name": "Inscrito",
+  "plural": "Inscritos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "aprovado": {
+      "type": "boolean"
+    },
+    "rank": {
+      "type": "number"
+    },
+    "curriculo": {
+      "type": "string"
+    },
+    "mensagem": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "processoSeletivo": {
+      "type": "belongsTo",
+      "model": "processoSeletivo",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "discente": {
+      "type": "belongsTo",
+      "model": "Discente",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
