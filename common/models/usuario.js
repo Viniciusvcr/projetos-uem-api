@@ -86,7 +86,7 @@ module.exports = function(Usuario) {
     return Email.send(message);
   };
 
-  Usuario.sendMail = async function(to, subject, text, cb) {
+  Usuario.sendMail = async function(to, subject, text) {
     try {
       await sendMail(to, subject, text);
     } catch (err) {
