@@ -6,6 +6,11 @@
   "options": {
     "validateUpsert": true
   },
+  "scope": {
+    "include": {
+      "relation": "discente"
+    }
+  },
   "properties": {
     "aprovado": {
       "type": "boolean",
