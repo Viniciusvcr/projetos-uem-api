@@ -55,7 +55,7 @@
     "area": {
       "type": "belongsTo",
       "model": "Area",
-      "foreignKey": "",
+      "foreignKey": "SubareaId",
       "options": {
         "nestRemoting": true
       }
