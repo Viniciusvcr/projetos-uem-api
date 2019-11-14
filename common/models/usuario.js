@@ -14,7 +14,11 @@ const error = function(message, status) {
 module.exports = function(Usuario) {
   // Verifica se o email fornecido tem a forma de um email
   Usuario.observe('before save', (ctx, next) => {
-    const newUsuario = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
+    const newUsuario = ctx.isNewInstance ?
+      ctx.instance :
+      ctx.data ?
+      ctx.data :
+      ctx.instance;
 
     if (newUsuario.email) {
       if (!verifyEmail.validate(newUsuario.email)) {
@@ -25,7 +29,11 @@ module.exports = function(Usuario) {
 
   // Verifica a integridade do atributo Realm
   Usuario.observe('before save', (ctx, next) => {
-    const newUsuario = ctx.isNewInstance ? ctx.instance : ctx.data ? ctx.data : ctx.instance;
+    const newUsuario = ctx.isNewInstance ?
+      ctx.instance :
+      ctx.data ?
+      ctx.data :
+      ctx.instance;
     const roles = require('../../server/data/config.json').roles;
 
     if (newUsuario.realm) {
@@ -74,22 +82,24 @@ module.exports = function(Usuario) {
     } else return next();
   });
 
-  const sendMail = (to, subject, text) => {
+  const sendMail = (to, subject, text, cco) => {
     const Email = Usuario.app.models.Email;
 
     const message = {
       to,
       subject,
-      text
+      text,
+      bcc: cco
     };
 
     return Email.send(message);
   };
 
-  Usuario.sendMail = async function(to, subject, text) {
+  Usuario.sendMail = async function(to, subject, text, cco) {
     try {
-      await sendMail(to, subject, text);
+      return await sendMail(to, subject, text, cco);
     } catch (err) {
+      console.log(err);
       throw err;
     }
   };
@@ -101,6 +111,12 @@ module.exports = function(Usuario) {
         type: 'array',
         required: true,
         description: 'Destinatários do email'
+      },
+      {
+        arg: 'cco',
+        type: 'array',
+        required: false,
+        description: 'Cópias carbono ocultas do email'
       },
       {
         arg: 'subject',
