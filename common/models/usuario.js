@@ -108,15 +108,9 @@ module.exports = function(Usuario) {
     accepts: [
       {
         arg: 'to',
-        type: 'array',
+        type: 'string',
         required: true,
         description: 'Destinatários do email'
-      },
-      {
-        arg: 'cco',
-        type: 'array',
-        required: false,
-        description: 'Cópias carbono ocultas do email'
       },
       {
         arg: 'subject',
@@ -129,6 +123,12 @@ module.exports = function(Usuario) {
         type: 'string',
         required: true,
         description: 'Texto do email'
+      },
+      {
+        arg: 'cco',
+        type: 'array',
+        required: false,
+        description: 'Cópias carbono ocultas do email'
       }
     ],
     http: {path: '/send-email', verb: 'post', status: 204},
