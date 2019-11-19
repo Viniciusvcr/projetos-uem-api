@@ -106,6 +106,9 @@
   "AcessoMensalUsuarios": {
     "dataSource": "db",
     "public": true
+  },
+  "relatoriosAdmin": {
+    "dataSource": "mem",
+    "public": true
   }
 }
-

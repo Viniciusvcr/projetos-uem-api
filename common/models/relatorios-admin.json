@@ -1,0 +1,22 @@
+{
+  "name": "relatoriosAdmin",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "qntdProjetosCriados": {
+      "type": "number",
+      "default": 0
+    },
+    "qntdUsuariosCriados": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
