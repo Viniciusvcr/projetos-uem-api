@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = function(Projeto) {
   // Verifica se a data de termino não antecede a data de inicio
-  Projeto.observe('before save', (ctx, next) => {
+  Projeto.observe("before save", (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
 
@@ -15,7 +15,7 @@ module.exports = function(Projeto) {
         if (dataInicio > dataTermino) {
           const error = new Error();
 
-          error.message = 'Data de término antecede data de início.';
+          error.message = "Data de término antecede data de início.";
           error.status = 400;
 
           return next(error);
@@ -29,7 +29,7 @@ module.exports = function(Projeto) {
         if (dataInicio > dataTermino) {
           const error = new Error();
 
-          error.message = 'Data de término antecede data de início.';
+          error.message = "Data de término antecede data de início.";
           error.status = 400;
 
           return next(error);
@@ -40,7 +40,7 @@ module.exports = function(Projeto) {
   });
 
   // Verifica se o numero atual de participantes respeita o limite maximo
-  Projeto.observe('before save', (ctx, next) => {
+  Projeto.observe("before save", (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
 
@@ -54,7 +54,7 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.message =
-            'Quantidade atual de participantes excede o limite permitido.';
+            "Quantidade atual de participantes excede o limite permitido.";
           error.status = 400;
 
           return next(error);
@@ -69,7 +69,7 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.message =
-            'Quantidade atual de participantes excede o limite permitido.';
+            "Quantidade atual de participantes excede o limite permitido.";
           error.status = 400;
 
           return next(error);
@@ -79,12 +79,12 @@ module.exports = function(Projeto) {
   });
 
   // Cria o modelo do relatorio para o projeto instanciado
-  Projeto.afterRemote('create', (ctx, projetoInstance, next) => {
+  Projeto.afterRemote("create", (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     const dataAtual = Date.now();
     relatorioProjeto.create(
-      {dataCriacao: dataAtual, projetoId: projetoInstance.id},
+      { dataCriacao: dataAtual, projetoId: projetoInstance.id },
       (err, obj) => {
         if (err) return next(err);
 
@@ -94,22 +94,37 @@ module.exports = function(Projeto) {
   });
 
   // Incremento do número de acessos para o projeto
-  Projeto.afterRemote('findById', (ctx, projetoInstance, next) => {
+  Projeto.afterRemote("findById", (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     relatorioProjeto.findOne(
-      {where: {projetoId: projetoInstance.id}},
+      { where: { projetoId: projetoInstance.id } },
       (err, relatorio) => {
         if (err) return next(err);
 
         relatorio.updateAttribute(
-          'numeroAcessos',
+          "numeroAcessos",
           relatorio.numeroAcessos + 1,
           (err, updatedRelatorio) => {
             if (err) return next(err);
             else return next();
           }
         );
+      }
+    );
+  });
+
+  Projeto.afterRemote("create", (ctx, userInstance, next) => {
+    const relariosAdmin = Projeto.app.models.relatoriosAdmin;
+    relariosAdmin.updateAttribute(
+      "qntdProjetosCriados",
+      relariosAdmin.qntdProjetosCriados + 1,
+      (err, instance) => {
+        if (err) {
+          return next(err);
+        } else {
+          return next();
+        }
       }
     );
   });
