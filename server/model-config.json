@@ -59,7 +59,8 @@
           "login": true,
           "logout": true,
           "changePassword": true,
-          "resetPassword": true
+          "resetPassword": true,
+          "sendMail": true
         }
       }
     }
@@ -115,5 +116,8 @@
   "AcessoMensalUsuarios": {
     "dataSource": "db",
     "public": true
+  },
+  "Email": {
+    "dataSource": "email"
   }
 }
