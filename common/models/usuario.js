@@ -13,21 +13,12 @@ const error = function(message, status) {
 
 module.exports = function(Usuario) {
   // Verifica se o email fornecido tem a forma de um email
-<<<<<<< HEAD
   Usuario.observe("before save", (ctx, next) => {
     const newUsuario = ctx.isNewInstance
       ? ctx.instance
       : ctx.data
       ? ctx.data
       : ctx.instance;
-=======
-  Usuario.observe('before save', (ctx, next) => {
-    const newUsuario = ctx.isNewInstance ?
-      ctx.instance :
-      ctx.data ?
-      ctx.data :
-      ctx.instance;
->>>>>>> master
 
     if (newUsuario.email) {
       if (!verifyEmail.validate(newUsuario.email)) {
@@ -37,13 +28,13 @@ module.exports = function(Usuario) {
   });
 
   // Verifica a integridade do atributo Realm
-  Usuario.observe('before save', (ctx, next) => {
-    const newUsuario = ctx.isNewInstance ?
-      ctx.instance :
-      ctx.data ?
-      ctx.data :
-      ctx.instance;
-    const roles = require('../../server/data/config.json').roles;
+  Usuario.observe("before save", (ctx, next) => {
+    const newUsuario = ctx.isNewInstance
+      ? ctx.instance
+      : ctx.data
+      ? ctx.data
+      : ctx.instance;
+    const roles = require("../../server/data/config.json").roles;
 
     if (newUsuario.realm) {
       if (roles.includes(newUsuario.realm)) {
@@ -91,21 +82,6 @@ module.exports = function(Usuario) {
     } else return next();
   });
 
-<<<<<<< HEAD
-  Usuario.afterRemote("create", (ctx, userInstance, next) => {
-    const relariosAdmin = Usuario.app.models.relatoriosAdmin;
-    relariosAdmin.updateAttribute(
-      "qntdUsuariosCriados",
-      relariosAdmin.qntdUsuariosCriados + 1,
-      (err, instance) => {
-        if (err) {
-          return next(err);
-        } else {
-          return next();
-        }
-      }
-    );
-=======
   const sendMail = (to, subject, text, cco) => {
     const Email = Usuario.app.models.Email;
 
@@ -128,35 +104,34 @@ module.exports = function(Usuario) {
     }
   };
 
-  Usuario.remoteMethod('sendMail', {
+  Usuario.remoteMethod("sendMail", {
     accepts: [
       {
-        arg: 'to',
-        type: 'string',
+        arg: "to",
+        type: "string",
         required: true,
-        description: 'Destinatários do email'
+        description: "Destinatários do email"
       },
       {
-        arg: 'subject',
-        type: 'string',
+        arg: "subject",
+        type: "string",
         required: true,
-        description: 'Assunto do email'
+        description: "Assunto do email"
       },
       {
-        arg: 'text',
-        type: 'string',
+        arg: "text",
+        type: "string",
         required: true,
-        description: 'Texto do email'
+        description: "Texto do email"
       },
       {
-        arg: 'cco',
-        type: 'array',
+        arg: "cco",
+        type: "array",
         required: false,
-        description: 'Cópias carbono ocultas do email'
+        description: "Cópias carbono ocultas do email"
       }
     ],
-    http: {path: '/send-email', verb: 'post', status: 204},
-    description: 'Envia um email para Usuários'
->>>>>>> master
+    http: { path: "/send-email", verb: "post", status: 204 },
+    description: "Envia um email para Usuários"
   });
 };
