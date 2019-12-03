@@ -36,6 +36,14 @@
     "dataSource": "db",
     "public": false
   },
+  "processoSeletivo": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Inscrito": {
+    "dataSource": "db",
+    "public": true
+  },
   "Usuario": {
     "dataSource": "db",
     "public": true,
@@ -51,7 +59,8 @@
           "login": true,
           "logout": true,
           "changePassword": true,
-          "resetPassword": true
+          "resetPassword": true,
+          "sendMail": true
         }
       }
     }
@@ -93,7 +102,8 @@
     "public": true
   },
   "relatorioProjeto": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": true
   },
   "Area": {
     "dataSource": "db",
@@ -107,8 +117,7 @@
     "dataSource": "db",
     "public": true
   },
-  "relatoriosAdmin": {
-    "dataSource": "mem",
-    "public": true
+  "Email": {
+    "dataSource": "email"
   }
 }

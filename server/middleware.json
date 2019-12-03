@@ -36,7 +36,20 @@
   },
   "session": {},
   "auth": {},
-  "parse": {},
+  "parse": {
+    "body-parser#json": {
+      "params": {
+        "strict": false,
+        "limit": "2000kb"
+      }
+    },
+    "body-parser#urlencoded": {
+      "params": {
+        "extended": true,
+        "limit": "2000kb"
+      }
+    }
+  },
   "routes": {
     "loopback#rest": {
       "paths": [
@@ -44,11 +57,25 @@
       ]
     }
   },
-  "files": {},
+  "files": {
+    "loopback#static": {
+      "paths": [
+        "/pet"
+      ],
+      "params": "$!../client/pet"
+    }
+  },
   "final": {
     "loopback#urlNotFound": {}
   },
   "final:after": {
-    "strong-error-handler": {}
+    "strong-error-handler": {
+      "strong-error-handler": {
+        "params": {
+          "debug": true,
+          "log": true
+        }
+      }
+    }
   }
 }

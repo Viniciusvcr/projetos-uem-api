@@ -107,21 +107,23 @@ module.exports = async function(app) {
       const modelDS = models[model].getDataSource();
 
       if (modelDS) {
-        try {
-          const actual = await isActual(mysql, model);
+        if (model != 'Email') {
+          try {
+            const actual = await isActual(mysql, model);
 
-          if (actual) {
-            console.log(
-              `  ${boldWhite}Modelo '${model}' está atualizado no Banco de Dados${reset}`
-            );
-          } else {
-            await mysql.autoupdate(model);
-            console.log(`  ${boldGreen}${model} atualizado com sucesso!${reset}`);
+            if (actual) {
+              console.log(
+                `  ${boldWhite}Modelo '${model}' está atualizado no Banco de Dados${reset}`
+              );
+            } else {
+              await mysql.autoupdate(model);
+              console.log(`  ${boldGreen}${model} atualizado com sucesso!${reset}`);
+            }
+
+            await modelActions(model);
+          } catch (err) {
+            throw err;
           }
-
-          await modelActions(model);
-        } catch (err) {
-          throw err;
         }
       }
     }

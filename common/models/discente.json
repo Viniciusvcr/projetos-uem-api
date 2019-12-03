@@ -5,6 +5,11 @@
   "options": {
     "validateUpsert": true
   },
+  "scope": {
+    "include": {
+      "relation": "usuario"
+    }
+  },
   "properties": {
     "ra": {
       "type": "string",
