@@ -39,6 +39,14 @@
       "options": {
         "nestRemoting": true
       }
+    },
+    "relatorioProjetos": {
+      "type": "hasMany",
+      "model": "relatorioProjeto",
+      "foreignKey": "",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [
