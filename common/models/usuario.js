@@ -134,4 +134,19 @@ module.exports = function(Usuario) {
     http: { path: "/send-email", verb: "post", status: 204 },
     description: "Envia um email para Usuários"
   });
+
+  Usuario.afterRemote("create", (ctx, userInstance, next) => {
+    const relariosAdmin = Usuario.app.models.relatorioAdmin;
+    relariosAdmin.updateAttribute(
+      "qntdUsuariosCriados",
+      relariosAdmin.qntdUsuariosCriados + 1,
+      (err, instance) => {
+        if (err) {
+          return next(err);
+        } else {
+          return next();
+        }
+      }
+    );
+  });
 };

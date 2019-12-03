@@ -226,7 +226,7 @@ module.exports = function(Projeto) {
     );
   });
 
-  // Incremento do número de acessos para o projeto
+  //Incremento do número de acessos para o projeto
   Projeto.afterRemote("findById", (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
@@ -247,18 +247,18 @@ module.exports = function(Projeto) {
     );
   });
 
-  Projeto.afterRemote("create", (ctx, userInstance, next) => {
-    const relariosAdmin = Projeto.app.models.relatoriosAdmin;
-    relariosAdmin.updateAttribute(
-      "qntdProjetosCriados",
-      relariosAdmin.qntdProjetosCriados + 1,
-      (err, instance) => {
-        if (err) {
-          return next(err);
-        } else {
-          return next();
-        }
-      }
-    );
-  });
+  // Projeto.afterRemote("create", (ctx, userInstance, next) => {
+  //   const relatiosAdmin = Projeto.app.models.relatorioAdmin;
+  //   relatiosAdmin.updateAttribute(
+  //     "qntdProjetosCriados",
+  //     relatiosAdmin.qntdProjetosCriados + 1,
+  //     (err, instance) => {
+  //       if (err) {
+  //         return next(err);
+  //       } else {
+  //         return next();
+  //       }
+  //     }
+  //   );
+  // });
 };

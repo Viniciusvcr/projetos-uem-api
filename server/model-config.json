@@ -119,5 +119,9 @@
   },
   "Email": {
     "dataSource": "email"
+  },
+  "relatorioAdmin": {
+    "dataSource": "db",
+    "public": true
   }
 }
