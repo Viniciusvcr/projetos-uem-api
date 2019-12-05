@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = function(Projeto) {
   // Verifica se a data de termino não antecede a data de inicio
-  Projeto.observe("before save", (ctx, next) => {
+  Projeto.observe('before save', (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
 
@@ -15,7 +15,7 @@ module.exports = function(Projeto) {
         if (dataInicio > dataTermino) {
           const error = new Error();
 
-          error.message = "Data de término antecede data de início.";
+          error.message = 'Data de término antecede data de início.';
           error.status = 400;
 
           return next(error);
@@ -29,7 +29,7 @@ module.exports = function(Projeto) {
         if (dataInicio > dataTermino) {
           const error = new Error();
 
-          error.message = "Data de término antecede data de início.";
+          error.message = 'Data de término antecede data de início.';
           error.status = 400;
 
           return next(error);
@@ -40,7 +40,7 @@ module.exports = function(Projeto) {
   });
 
   // Verifica se o numero atual de participantes respeita o limite maximo
-  Projeto.observe("before save", (ctx, next) => {
+  Projeto.observe('before save', (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
 
@@ -54,7 +54,7 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.message =
-            "Quantidade atual de participantes excede o limite permitido.";
+            'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -69,7 +69,7 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.message =
-            "Quantidade atual de participantes excede o limite permitido.";
+            'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -79,7 +79,7 @@ module.exports = function(Projeto) {
   });
 
   // Verifica se o Docente existe
-  Projeto.observe("before save", async (ctx, next) => {
+  Projeto.observe('before save', async (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
       const Docente = Projeto.app.models.Docente;
@@ -92,11 +92,11 @@ module.exports = function(Projeto) {
         const error = new Error();
 
         error.status = 404;
-        error.message = "Docente não encontrado.";
+        error.message = 'Docente não encontrado.';
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const docenteId = ctx.data.docenteId;
@@ -112,19 +112,19 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.status = 404;
-          error.message = "Docente não encontrado.";
+          error.message = 'Docente não encontrado.';
 
-          return next(error);
+          throw error;
         } catch (err) {
-          return next(err);
+          throw err;
         }
       }
-      return next();
+      return;
     }
   });
 
   // Verifica se a Area existe
-  Projeto.observe("before save", async (ctx, next) => {
+  Projeto.observe('before save', async (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
       const Area = Projeto.app.models.Area;
@@ -137,11 +137,11 @@ module.exports = function(Projeto) {
         const error = new Error();
 
         error.status = 404;
-        error.message = "Area não encontrada";
+        error.message = 'Area não encontrada';
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const areaId = ctx.data.areaId;
@@ -157,18 +157,18 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.status = 404;
-          error.message = "Area não encontrada.";
+          error.message = 'Area não encontrada.';
 
-          return next(error);
+          return;
         } catch (err) {
-          return next(err);
+          throw err;
         }
-      } else return next();
+      } else return;
     }
   });
 
   // Verifica se a Subarea existe
-  Projeto.observe("before save", async (ctx, next) => {
+  Projeto.observe('before save', async (ctx, next) => {
     if (ctx.isNewInstance) {
       const newProjeto = ctx.instance;
       const Subarea = Projeto.app.models.Subarea;
@@ -176,16 +176,11 @@ module.exports = function(Projeto) {
       try {
         const subareaProjeto = await Subarea.findById(newProjeto.subareaId);
 
-        if (subareaProjeto) return next();
+        if (subareaProjeto) return;
 
         const error = new Error();
-
-        error.status = 404;
-        error.message = "Subarea não encontrada";
-
-        return next(error);
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const subareaId = ctx.data.subareaId;
@@ -201,7 +196,7 @@ module.exports = function(Projeto) {
           const error = new Error();
 
           error.status = 404;
-          error.message = "Subarea não encontrada.";
+          error.message = 'Subarea não encontrada.';
 
           return next(error);
         } catch (err) {
@@ -212,12 +207,12 @@ module.exports = function(Projeto) {
   });
 
   // Cria o modelo do relatorio para o projeto instanciado
-  Projeto.afterRemote("create", (ctx, projetoInstance, next) => {
+  Projeto.afterRemote('create', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     const dataAtual = Date.now();
     relatorioProjeto.create(
-      { dataCriacao: dataAtual, projetoId: projetoInstance.id },
+      {dataCriacao: dataAtual, projetoId: projetoInstance.id},
       (err, obj) => {
         if (err) return next(err);
 
@@ -226,17 +221,17 @@ module.exports = function(Projeto) {
     );
   });
 
-  //Incremento do número de acessos para o projeto
-  Projeto.afterRemote("findById", (ctx, projetoInstance, next) => {
+  // Incremento do número de acessos para o projeto
+  Projeto.afterRemote('findById', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     relatorioProjeto.findOne(
-      { where: { projetoId: projetoInstance.id } },
+      {where: {projetoId: projetoInstance.id}},
       (err, relatorio) => {
         if (err) return next(err);
 
         relatorio.updateAttribute(
-          "numeroAcessos",
+          'numeroAcessos',
           relatorio.numeroAcessos + 1,
           (err, updatedRelatorio) => {
             if (err) return next(err);
@@ -247,18 +242,16 @@ module.exports = function(Projeto) {
     );
   });
 
-  // Projeto.afterRemote("create", (ctx, userInstance, next) => {
-  //   const relatiosAdmin = Projeto.app.models.relatorioAdmin;
-  //   relatiosAdmin.updateAttribute(
-  //     "qntdProjetosCriados",
-  //     relatiosAdmin.qntdProjetosCriados + 1,
-  //     (err, instance) => {
-  //       if (err) {
-  //         return next(err);
-  //       } else {
-  //         return next();
-  //       }
-  //     }
-  //   );
-  // });
+  Projeto.afterRemote('create', async (ctx, userInstance, next) => {
+    const relatorioAdmin = Projeto.app.models.relatorioAdmin;
+    try {
+      const newRelatorioAdmin = await relatorioAdmin.findById(1);
+      await newRelatorioAdmin.updateAttribute(
+        'qntdProjetosCriados',
+        newRelatorioAdmin.qntdProjetosCriados + 1
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
 };
