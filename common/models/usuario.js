@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const verifyEmail = require("isemail");
+const verifyEmail = require('isemail');
 
 const error = function(message, status) {
   const error = new Error();
@@ -13,38 +13,38 @@ const error = function(message, status) {
 
 module.exports = function(Usuario) {
   // Verifica se o email fornecido tem a forma de um email
-  Usuario.observe("before save", (ctx, next) => {
-    const newUsuario = ctx.isNewInstance
-      ? ctx.instance
-      : ctx.data
-      ? ctx.data
-      : ctx.instance;
+  Usuario.observe('before save', (ctx, next) => {
+    const newUsuario = ctx.isNewInstance ?
+      ctx.instance :
+      ctx.data ?
+      ctx.data :
+      ctx.instance;
 
     if (newUsuario.email) {
       if (!verifyEmail.validate(newUsuario.email)) {
-        return next(error("Email inválido", 400));
+        return next(error('Email inválido', 400));
       } else return next();
     } else return next();
   });
 
   // Verifica a integridade do atributo Realm
-  Usuario.observe("before save", (ctx, next) => {
-    const newUsuario = ctx.isNewInstance
-      ? ctx.instance
-      : ctx.data
-      ? ctx.data
-      : ctx.instance;
-    const roles = require("../../server/data/config.json").roles;
+  Usuario.observe('before save', (ctx, next) => {
+    const newUsuario = ctx.isNewInstance ?
+      ctx.instance :
+      ctx.data ?
+      ctx.data :
+      ctx.instance;
+    const roles = require('../../server/data/config.json').roles;
 
     if (newUsuario.realm) {
       if (roles.includes(newUsuario.realm)) {
         return next();
-      } else return next(error("Realm não encontrada", 404));
+      } else return next(error('Realm não encontrada', 404));
     } else return next();
   });
 
   // Aplica a função passada no cadastro
-  Usuario.observe("after save", (ctx, next) => {
+  Usuario.observe('after save', (ctx, next) => {
     if (ctx.isNewInstance) {
       const Role = Usuario.app.models.Role;
       const RoleMapping = Usuario.app.models.RoleMapping;
@@ -53,11 +53,11 @@ module.exports = function(Usuario) {
       const realmName = user.realm;
       const id = user.id;
 
-      Role.findOne({ where: { name: realmName } }, (err, role) => {
+      Role.findOne({where: {name: realmName}}, (err, role) => {
         if (err) return next(err);
 
         RoleMapping.findOrCreate(
-          { where: { principalType: RoleMapping.USER, principalId: id } },
+          {where: {principalType: RoleMapping.USER, principalId: id}},
           {
             principalType: RoleMapping.USER,
             principalId: id,
@@ -104,49 +104,47 @@ module.exports = function(Usuario) {
     }
   };
 
-  Usuario.remoteMethod("sendMail", {
+  Usuario.remoteMethod('sendMail', {
     accepts: [
       {
-        arg: "to",
-        type: "string",
+        arg: 'to',
+        type: 'string',
         required: true,
-        description: "Destinatários do email"
+        description: 'Destinatários do email'
       },
       {
-        arg: "subject",
-        type: "string",
+        arg: 'subject',
+        type: 'string',
         required: true,
-        description: "Assunto do email"
+        description: 'Assunto do email'
       },
       {
-        arg: "text",
-        type: "string",
+        arg: 'text',
+        type: 'string',
         required: true,
-        description: "Texto do email"
+        description: 'Texto do email'
       },
       {
-        arg: "cco",
-        type: "array",
+        arg: 'cco',
+        type: 'array',
         required: false,
-        description: "Cópias carbono ocultas do email"
+        description: 'Cópias carbono ocultas do email'
       }
     ],
-    http: { path: "/send-email", verb: "post", status: 204 },
-    description: "Envia um email para Usuários"
+    http: {path: '/send-email', verb: 'post', status: 204},
+    description: 'Envia um email para Usuários'
   });
 
-  Usuario.afterRemote("create", (ctx, userInstance, next) => {
-    const relariosAdmin = Usuario.app.models.relatorioAdmin;
-    relariosAdmin.updateAttribute(
-      "qntdUsuariosCriados",
-      relariosAdmin.qntdUsuariosCriados + 1,
-      (err, instance) => {
-        if (err) {
-          return next(err);
-        } else {
-          return next();
-        }
-      }
-    );
+  Usuario.afterRemote('create', async (ctx, userInstance, next) => {
+    const relatorioAdmin = Usuario.app.models.relatorioAdmin;
+    try {
+      const newRelatorioAdmin = await relatorioAdmin.findById(1);
+      await newRelatorioAdmin.updateAttribute(
+        'qntdUsuariosCriados',
+        newRelatorioAdmin.qntdUsuariosCriados + 1
+      );
+    } catch (err) {
+      throw err;
+    }
   });
 };
