@@ -59,7 +59,8 @@
           "login": true,
           "logout": true,
           "changePassword": true,
-          "resetPassword": true
+          "resetPassword": true,
+          "sendMail": true
         }
       }
     }
@@ -113,6 +114,13 @@
     "public": true
   },
   "AcessoMensalUsuarios": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Email": {
+    "dataSource": "email"
+  },
+  "relatorioAdmin": {
     "dataSource": "db",
     "public": true
   }

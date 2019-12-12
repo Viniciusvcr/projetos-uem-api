@@ -12,7 +12,9 @@ module.exports = async function(app) {
 
     console.log(`${boldWhite}Informações da API:${reset}`);
 
-    console.log(`  ${boldWhite}Ambiente: ${boldRed}'${process.env.NODE_ENV}'${reset}`);
+    console.log(
+      `  ${boldWhite}Ambiente: ${boldRed}'${process.env.NODE_ENV}'${reset}`
+    );
     console.log(
       // eslint-disable-next-line max-len
       `  ${boldWhite}Banco de dados: ${boldRed}'${db.connector.name}:${db.connector.settings.database}'${reset}`
@@ -26,7 +28,10 @@ module.exports = async function(app) {
     const Admin = config.admin;
 
     try {
-      const user = await Usuario.upsertWithWhere({username: Admin.username}, Admin);
+      const user = await Usuario.upsertWithWhere(
+        {username: Admin.username},
+        Admin
+      );
       const role = await Role.findOne({where: {name: 'admin'}});
 
       if (!role) {
@@ -47,7 +52,9 @@ module.exports = async function(app) {
             `    '${boldGreen}${user.username}${reset}' se tornou um '${boldGreen}${role.name}${reset}'!`
           );
         } else {
-          console.log(`    Admin '${boldGreen}${user.username}${reset}' atualizado!`);
+          console.log(
+            `    Admin '${boldGreen}${user.username}${reset}' atualizado!`
+          );
         }
       }
     } catch (err) {
@@ -67,7 +74,9 @@ module.exports = async function(app) {
         );
 
         if (roleCreated) {
-          console.log(`    Role '${boldGreen}${roleInstance.name}${reset}' criada!`);
+          console.log(
+            `    Role '${boldGreen}${roleInstance.name}${reset}' criada!`
+          );
         } else {
           console.log(
             `    ${boldGreen}Role '${roleInstance.name}' já existe no Banco de Dados.${reset}`
@@ -101,34 +110,52 @@ module.exports = async function(app) {
     const models = mysql.modelBuilder.models;
 
     console.log();
-    console.log(`${boldWhite}Atualizando automaticamente os modelos no Banco de Dados...${reset}`);
+    console.log(
+      `${boldWhite}Atualizando automaticamente os modelos no Banco de Dados...${reset}`
+    );
 
     for (const model of Object.keys(models)) {
       const modelDS = models[model].getDataSource();
 
       if (modelDS) {
-        try {
-          const actual = await isActual(mysql, model);
+        if (model != 'Email') {
+          try {
+            const actual = await isActual(mysql, model);
 
-          if (actual) {
-            console.log(
-              `  ${boldWhite}Modelo '${model}' está atualizado no Banco de Dados${reset}`
-            );
-          } else {
-            await mysql.autoupdate(model);
-            console.log(`  ${boldGreen}${model} atualizado com sucesso!${reset}`);
+            if (actual) {
+              console.log(
+                `  ${boldWhite}Modelo '${model}' está atualizado no Banco de Dados${reset}`
+              );
+            } else {
+              await mysql.autoupdate(model);
+              console.log(
+                `  ${boldGreen}${model} atualizado com sucesso!${reset}`
+              );
+            }
+
+            await modelActions(model);
+          } catch (err) {
+            throw err;
           }
-
-          await modelActions(model);
-        } catch (err) {
-          throw err;
         }
       }
     }
+  };
+
+  const initRelatorio = async () => {
+    const relatorioAdmin = app.models.relatorioAdmin;
+    const newRelatorio = {
+      qntdProjetosCriados: 0,
+      qntdUsuariosCriados: 0,
+      qntdVisualizacoesTotal: 0
+    };
+
+    await relatorioAdmin.findOrCreate({where: {id: 1}}, newRelatorio);
   };
 
   await initDatabase();
   console.log();
   informations();
   console.log();
+  initRelatorio();
 };
