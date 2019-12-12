@@ -53,7 +53,8 @@ module.exports = function(Projeto) {
         if (atualParticipantes > limiteParticipantes) {
           const error = new Error();
 
-          error.message = 'Quantidade atual de participantes excede o limite permitido.';
+          error.message =
+            'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -67,7 +68,8 @@ module.exports = function(Projeto) {
         if (atualParticipantes > limiteParticipantes) {
           const error = new Error();
 
-          error.message = 'Quantidade atual de participantes excede o limite permitido.';
+          error.message =
+            'Quantidade atual de participantes excede o limite permitido.';
           error.status = 400;
 
           return next(error);
@@ -92,9 +94,9 @@ module.exports = function(Projeto) {
         error.status = 404;
         error.message = 'Docente não encontrado.';
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const docenteId = ctx.data.docenteId;
@@ -112,12 +114,12 @@ module.exports = function(Projeto) {
           error.status = 404;
           error.message = 'Docente não encontrado.';
 
-          return next(error);
+          throw error;
         } catch (err) {
-          return next(err);
+          throw err;
         }
       }
-      return next();
+      return;
     }
   });
 
@@ -137,9 +139,9 @@ module.exports = function(Projeto) {
         error.status = 404;
         error.message = 'Area não encontrada';
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const areaId = ctx.data.areaId;
@@ -157,11 +159,11 @@ module.exports = function(Projeto) {
           error.status = 404;
           error.message = 'Area não encontrada.';
 
-          return next(error);
+          return;
         } catch (err) {
-          return next(err);
+          throw err;
         }
-      } else return next();
+      } else return;
     }
   });
 
@@ -174,16 +176,11 @@ module.exports = function(Projeto) {
       try {
         const subareaProjeto = await Subarea.findById(newProjeto.subareaId);
 
-        if (subareaProjeto) return next();
+        if (subareaProjeto) return;
 
         const error = new Error();
-
-        error.status = 404;
-        error.message = 'Subarea não encontrada';
-
-        return next(error);
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const subareaId = ctx.data.subareaId;
@@ -214,28 +211,47 @@ module.exports = function(Projeto) {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
     const dataAtual = Date.now();
-    relatorioProjeto.create({dataCriacao: dataAtual, projetoId: projetoInstance.id}, (err, obj) => {
-      if (err) return next(err);
+    relatorioProjeto.create(
+      {dataCriacao: dataAtual, projetoId: projetoInstance.id},
+      (err, obj) => {
+        if (err) return next(err);
 
-      return next();
-    });
+        return next();
+      }
+    );
   });
 
   // Incremento do número de acessos para o projeto
   Projeto.afterRemote('findById', (ctx, projetoInstance, next) => {
     const relatorioProjeto = Projeto.app.models.relatorioProjeto;
 
-    relatorioProjeto.findOne({where: {projetoId: projetoInstance.id}}, (err, relatorio) => {
-      if (err) return next(err);
+    relatorioProjeto.findOne(
+      {where: {projetoId: projetoInstance.id}},
+      (err, relatorio) => {
+        if (err) return next(err);
 
-      relatorio.updateAttribute(
-        'numeroAcessos',
-        relatorio.numeroAcessos + 1,
-        (err, updatedRelatorio) => {
-          if (err) return next(err);
-          else return next();
-        }
+        relatorio.updateAttribute(
+          'numeroAcessos',
+          relatorio.numeroAcessos + 1,
+          (err, updatedRelatorio) => {
+            if (err) return next(err);
+            else return next();
+          }
+        );
+      }
+    );
+  });
+
+  Projeto.afterRemote('create', async (ctx, userInstance, next) => {
+    const relatorioAdmin = Projeto.app.models.relatorioAdmin;
+    try {
+      const newRelatorioAdmin = await relatorioAdmin.findById(1);
+      await newRelatorioAdmin.updateAttribute(
+        'qntdProjetosCriados',
+        newRelatorioAdmin.qntdProjetosCriados + 1
       );
-    });
+    } catch (err) {
+      throw err;
+    }
   });
 };

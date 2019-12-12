@@ -134,4 +134,17 @@ module.exports = function(Usuario) {
     http: {path: '/send-email', verb: 'post', status: 204},
     description: 'Envia um email para Usuários'
   });
+
+  Usuario.afterRemote('create', async (ctx, userInstance, next) => {
+    const relatorioAdmin = Usuario.app.models.relatorioAdmin;
+    try {
+      const newRelatorioAdmin = await relatorioAdmin.findById(1);
+      await newRelatorioAdmin.updateAttribute(
+        'qntdUsuariosCriados',
+        newRelatorioAdmin.qntdUsuariosCriados + 1
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
 };
