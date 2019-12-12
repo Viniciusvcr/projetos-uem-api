@@ -66,8 +66,7 @@
       "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "Docente",
-      "permission": "ALLOW",
-      "property": "create"
+      "permission": "ALLOW"
     },
     {
       "accessType": "READ",
