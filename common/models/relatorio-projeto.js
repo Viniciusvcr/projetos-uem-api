@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function(Relatorioprojeto) {
   function monthDiff(d1, d2) {
@@ -10,17 +10,17 @@ module.exports = function(Relatorioprojeto) {
   }
 
   // Verifica duplicação de um relatorio
-  Relatorioprojeto.observe('before save', (ctx, next) => {
+  Relatorioprojeto.observe("before save", (ctx, next) => {
     if (ctx.isNewInstance) {
       Relatorioprojeto.findOne(
-        {where: {projetoId: ctx.instance.projetoId}},
+        { where: { projetoId: ctx.instance.projetoId } },
         (err, obj) => {
           if (err) return next(err);
 
           if (obj) {
             const error = new Error();
 
-            error.message = 'Relatório para o projeto já existente.';
+            error.message = "Relatório para o projeto já existente.";
             error.status = 409;
 
             return next(error);
@@ -30,21 +30,21 @@ module.exports = function(Relatorioprojeto) {
     } else return next();
   });
 
-  //Verifica se o projeto ao qual o relatorio pertence existe
-  Relatorioprojeto.observe('before save', (ctx, next) => {
+  // Verifica se o projeto ao qual o relatorio pertence existe
+  Relatorioprojeto.observe("before save", (ctx, next) => {
     if (ctx.isNewInstance) {
       return next();
     } else {
       const projetoId = ctx.data.projetoId;
       const Projetos = Relatorioprojeto.app.models.Projeto;
       if (projetoId) {
-        Projetos.findOne({where: {projetoId}}, (err, projeto) => {
+        Projetos.findOne({ where: { projetoId } }, (err, projeto) => {
           if (err) return next(err);
           if (projeto) return next();
           else {
             const error = new Error();
 
-            error.message = 'Projeto não encontrado.';
+            error.message = "Projeto não encontrado.";
             error.status = 404;
 
             return next(error);
@@ -57,7 +57,7 @@ module.exports = function(Relatorioprojeto) {
   // Retorna a media de acessos por mes de um projeto
   Relatorioprojeto.mediaAcessos = function(projetoId, cb) {
     Relatorioprojeto.findOne(
-      {where: {projetoId: projetoId}},
+      { where: { projetoId: projetoId } },
       (err, relatorio) => {
         if (err) return cb(err);
 
@@ -77,21 +77,23 @@ module.exports = function(Relatorioprojeto) {
     );
   };
 
-  Relatorioprojeto.remoteMethod('mediaAcessos', {
+  Relatorioprojeto.remoteMethod("mediaAcessos", {
     accepts: {
-      arg: 'projetoId',
-      type: 'number',
+      arg: "projetoId",
+      type: "number",
       required: true,
-      description: 'ID do Projeto',
+      description: "ID do Projeto"
     },
-    returns: {arg: 'response', type: 'number', root: true},
-    http: {path: '/mediaAcessos', verb: 'get', status: 200},
-    description: 'Retorna média de acessos por mês de um projeto.',
+    returns: { arg: "response", type: "number", root: true },
+    http: { path: "/mediaAcessos", verb: "get", status: 200 },
+    description: "Retorna média de acessos por mês de um projeto."
   });
   //eslint-disable-next-line
   Relatorioprojeto.relevancia = async function(projetoId, cb) {
     try {
-      const relatorio = await Relatorioprojeto.findOne({where: {projetoId}});
+      const relatorio = await Relatorioprojeto.findOne({
+        where: { projetoId }
+      });
 
       const relatorios = await Relatorioprojeto.find();
 
@@ -112,15 +114,15 @@ module.exports = function(Relatorioprojeto) {
     }
   };
 
-  Relatorioprojeto.remoteMethod('relevancia', {
+  Relatorioprojeto.remoteMethod("relevancia", {
     accepts: {
-      arg: 'projetoId',
-      type: 'number',
+      arg: "projetoId",
+      type: "number",
       required: true,
-      description: 'ID do projeto',
+      description: "ID do projeto"
     },
-    returns: {arg: 'response', type: 'number', root: true},
-    http: {path: '/relevancia', verb: 'get', status: 200},
-    description: 'Retorna a relevância de um projeto nos acessos totais.',
+    returns: { arg: "response", type: "number", root: true },
+    http: { path: "/relevancia", verb: "get", status: 200 },
+    description: "Retorna a relevância de um projeto nos acessos totais."
   });
 };
