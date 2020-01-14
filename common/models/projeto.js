@@ -85,18 +85,20 @@ module.exports = function(Projeto) {
       const Docente = Projeto.app.models.Docente;
 
       try {
+        console.log("DOCENTE ", newProjeto.docenteId);
         const docenteProjeto = await Docente.findById(newProjeto.docenteId);
 
-        if (docenteProjeto) return next();
+        if (docenteProjeto) return;
 
         const error = new Error();
+        next();
 
         error.status = 404;
         error.message = "Docente não encontrado.";
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const docenteId = ctx.data.docenteId;
@@ -107,19 +109,19 @@ module.exports = function(Projeto) {
         try {
           const docenteProjeto = await Docente.findById(docenteId);
 
-          if (docenteProjeto) return next();
+          if (docenteProjeto) return;
 
           const error = new Error();
 
           error.status = 404;
           error.message = "Docente não encontrado.";
 
-          return next(error);
+          throw error;
         } catch (err) {
-          return next(err);
+          throw err;
         }
       }
-      return next();
+      return;
     }
   });
 
@@ -130,18 +132,19 @@ module.exports = function(Projeto) {
       const Area = Projeto.app.models.Area;
 
       try {
+        console.log("AREA ", newProjeto.areaId);
         const areaProjeto = await Area.findById(newProjeto.areaId);
 
-        if (areaProjeto) return next();
+        if (areaProjeto) return;
 
         const error = new Error();
 
         error.status = 404;
         error.message = "Area não encontrada";
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const areaId = ctx.data.areaId;
@@ -152,18 +155,18 @@ module.exports = function(Projeto) {
         try {
           const areaProjeto = await Area.findById(areaId);
 
-          if (areaProjeto) return next();
+          if (areaProjeto) return;
 
           const error = new Error();
 
           error.status = 404;
           error.message = "Area não encontrada.";
 
-          return next(error);
+          throw error;
         } catch (err) {
-          return next(err);
+          throw err;
         }
-      } else return next();
+      } else return;
     }
   });
 
@@ -174,18 +177,19 @@ module.exports = function(Projeto) {
       const Subarea = Projeto.app.models.Subarea;
 
       try {
+        console.log("SUBAREA ", newProjeto.subareaId);
         const subareaProjeto = await Subarea.findById(newProjeto.subareaId);
 
-        if (subareaProjeto) return next();
+        if (subareaProjeto) return;
 
         const error = new Error();
 
         error.status = 404;
         error.message = "Subarea não encontrada";
 
-        return next(error);
+        throw error;
       } catch (err) {
-        return next(err);
+        throw err;
       }
     } else {
       const subareaId = ctx.data.subareaId;
@@ -196,18 +200,18 @@ module.exports = function(Projeto) {
         try {
           const subareaProjeto = await Subarea.findById(subareaId);
 
-          if (subareaProjeto) return next();
+          if (subareaProjeto) return;
 
           const error = new Error();
 
           error.status = 404;
           error.message = "Subarea não encontrada.";
 
-          return next(error);
+          throw error;
         } catch (err) {
-          return next(err);
+          throw err;
         }
-      } else return next();
+      } else return;
     }
   });
 

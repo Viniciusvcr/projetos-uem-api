@@ -30,7 +30,7 @@ module.exports = function(Relatorioprojeto) {
     } else return next();
   });
 
-  //Verifica se o projeto ao qual o relatorio pertence existe
+  // Verifica se o projeto ao qual o relatorio pertence existe
   Relatorioprojeto.observe("before save", (ctx, next) => {
     if (ctx.isNewInstance) {
       return next();
@@ -85,7 +85,7 @@ module.exports = function(Relatorioprojeto) {
       description: "ID do Projeto"
     },
     returns: { arg: "response", type: "number", root: true },
-    http: { path: "/mediaAcessos", verb: "get", status: 200 },
+    http: { path: "/mediaAcessos/:projetoId", verb: "get", status: 200 },
     description: "Retorna média de acessos por mês de um projeto."
   });
   //eslint-disable-next-line
@@ -122,7 +122,7 @@ module.exports = function(Relatorioprojeto) {
       description: "ID do projeto"
     },
     returns: { arg: "response", type: "number", root: true },
-    http: { path: "/relevancia", verb: "get", status: 200 },
+    http: { path: "/relevancia/:projetoId", verb: "get", status: 200 },
     description: "Retorna a relevância de um projeto nos acessos totais."
   });
 };
