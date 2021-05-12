@@ -23,7 +23,7 @@
     "loopback-connector-mysql": "^5.4.2",
     "loopback-content-range": "^2.0.0",
     "loopback3-xtotalcount": "^0.1.2",
-    "nodemailer": "^6.3.1",
+    "nodemailer": "^6.4.16",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^3.4.0"
   },
